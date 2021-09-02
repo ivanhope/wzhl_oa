@@ -1,0 +1,1024 @@
+{% extends 'public/index.html' %}
+{% block css %}
+<link href="/static/assets/theme/default/style.min.css" rel="stylesheet"/>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2-metronic.css"/>
+<link rel="stylesheet" href="/static/assets/css/DT_bootstrap.css"/>
+<!-- END PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-select/bootstrap-select.min.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/jquery-multi-select/css/multi-select.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-datepicker/css/datepicker.css" />
+<link href="/static/assets/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.css" rel="stylesheet"/>
+
+{% endblock %}
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <a id="back" class="btn btn-sm yellow">
+             返回 <i class="fa fa-reply"></i>
+        </a>
+        <div class="col-md-12"></div>
+        <div class="portlet box grey tasks-widget">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-globe"></i><span id = 'navigation_text'></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table table-striped table-bordered table-hover table-full-width"  id="datatables">
+                    <thead>
+                    <tr>
+                        <th>评估内容</th>
+                        <th>评估标准</th>
+                        <th>权重</th>
+                        <th>打分(自评)</th>
+                        <th>权重分数(自评)</th>
+                        <th>打分(上级主管)</th>
+                        <th>权重分数(上级主管)</th>
+                        <th>打分(中心负责人)</th>
+                        <th>权重分数(中心负责人)</th>
+                        <th>操作</th>
+{#                        <th>绩效名称</th>#}
+{#                        <th>被考评人</th>#}
+{#                        <th>ID</th>#}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5" id="div_cose">
+        <div class="portlet box grey">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-globe"></i>评分统计
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-horizontal form-bordered">
+                    <div class="form-body">
+                        <div class="form-group" id = "div_cose_self">
+                            <label class="control-label col-md-6" style="padding-right: 20px;padding-left: 20px">总分(自评)&nbsp&nbsp{{ name }}</label>
+                            <div class="col-md-6" style="padding-left: 20px;padding-right: 30px">
+                                <input type="text" id="self_total_score" class="form-control" disabled="true">
+                            </div>
+                        </div>
+                        <div class="form-group" id = "div_cose_supervisor">
+                            <label class="control-label col-md-6" style="padding-right: 20px">总分(上级主管)&nbsp&nbsp{{ supervisor }}</label>
+                            <div class="col-md-6" style="padding-left: 20px;padding-right: 30px">
+                                <input type="text" id="supervisor_total_score" class="form-control" disabled="true">
+                            </div>
+                        </div>
+                        <div class="form-group" id = "div_cose_principal">
+                            <label class="control-label col-md-6" style="padding-right: 20px">总分(中心负责人)&nbsp&nbsp{{ principal }}</label>
+                            <div class="col-md-6" style="padding-left: 20px;padding-right: 30px">
+                                <input type="text" id="principal_total_score" class="form-control" disabled="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" id="div_self">
+        <!-- BEGIN PORTLET-->
+        <div class="portlet box grey">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-globe"></i>自我评价
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="form-body">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <textarea id="self_comment" placeholder="在此输入评价内容(请勿少于10个字)" rows="{{ self_comment_row }}" maxlength="" class="form-control" style="height: 120px;"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                </div>
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+    <div class="col-md-12" id="div_supervisor">
+        <!-- BEGIN PORTLET-->
+        <div class="portlet box grey">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-globe"></i>直属主管评价
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="form-body">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <textarea id="supervisor_comment" placeholder="在此输入评价内容(请勿少于10个字)" rows="3" maxlength="" class="form-control" style="height: 120px;"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                </div>
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+    <div class="col-md-12" id="div_principal">
+        <!-- BEGIN PORTLET-->
+        <div class="portlet box grey">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-globe"></i>中心负责人评价
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="form-body">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <textarea id="principal_comment" placeholder="在此输入评价内容(请勿少于10个字)" rows="3" maxlength="" class="form-control" style="height: 120px;"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                </div>
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+</div>
+
+{% if request.session.status == 1 or request.session.status == 3 %}
+    <div class="row text-center">
+        <button id="commit" class="btn btn-sm purple center-block">
+             提交审核 <i class="fa fa-check"></i>
+        </button>
+    </div>
+{% endif %}
+{% if request.session.status == 7 %}
+    <div class="row text-center">
+        <button id="commit" class="btn btn-sm purple center-block">
+             最终确认 <i class="fa fa-check"></i>
+        </button>
+    </div>
+{% endif %}
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title" id = "modal_title">设定目标</h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" id="form" class="form-horizontal form-row-seperated">
+                    <div class="form-body">
+                        <div class="form-group last">
+                            <label class="col-sm-4 control-label">评估内容</label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" id='objective' style="width: 290px" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group last">
+                            <label class="col-sm-4 control-label">评估标准</label>
+
+                            <div class="col-sm-6">
+                                <textarea class="form-control" id='description' style="width: 290px" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">权重</label>
+                            <div class="col-md-6">
+                                <div class="slider bg-green ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="slider-snap-inc" aria-disabled="false">
+                                <a href="#" class="ui-slider-handle ui-state-default ui-corner-all" style="left: 80%;"></a></div>
+                                <div class="slider-value form-control-static">
+                                    <span id="slider-snap-inc-amount">50%</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% if request.session.status != 1 and request.session.status != 2 %}
+                        <div id="from_grade" class="form-group">
+                            <label class="control-label col-md-4">打分(1-100)
+                            <span class="required">
+                            </span>
+                            </label>
+                            <div class="col-md-6">
+                                <input id="grade" type="text" class="form-control" name="digits">
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+            <div id="id" style="display: none"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="save" type="button" class="btn btn-primary"><i class="fa fa-check"></i>保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4 id="score_html">您确定要提交吗</h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button id="commit_button" type="button" class="btn btn-primary"><i class="fa fa-check"></i>确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">您的目标设定审核未通过</h4>
+            </div>
+            <div class="modal-body form" style="margin-top:20px;margin-bottom:20px">
+                <form action="#" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">不通过的理由</label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" id='reason' style="width: 290px" rows="5" disabled>{{ rejected_reason }}</textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{#<span class="input-group-addon bootstrap-touchspin-postfix">%</span>#}
+
+{#<div class="col-md-4">#}
+{#    <input type="text" class="form-control" name="digits"><span for="digits" class="help-block">Please enter only digits.</span>#}
+{#</div>#}
+
+<!--/datatables-->
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="/static/assets/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/DT_bootstrap.js"></script>
+
+<!--<script src="/static/assets/plugins/context.js"></script>-->
+<!--<script src="/static/assets/plugins/jstree/dist/jstree.min.js"></script>-->
+<script src="/static/assets/plugins/holder.js"></script>
+<script src="/static/assets/plugins/stilearn-base.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
+<script src="/static/assets/plugins/select2/select2.js"></script>
+<script src="/static/assets/plugins/datatables/extras/TableTools.min.js"></script>
+<script src="/static/assets/scripts/custom/table-managed.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/jquery-validation/dist/jquery.validate.min.js"></script>
+{#<script type="text/javascript" src="/static/assets/scripts/custom/form-validation.js"></script>#}
+
+<script type="text/javascript">
+var oTable;
+var aButtons
+/* Formating function for row details */
+
+$(document).ready(function () {
+    $('#form').validate({
+        errorElement: 'span', //default input error message container
+        errorClass: 'help-block', // default input error message class
+        focusInvalid: false, // do not focus the last invalid input
+        ignore: "",
+        rules: {
+            digits: {
+                digits: true,
+                range: [0,100]
+            }
+        },
+        messages: {
+            digits: "请输入范围在0-100的数字"
+        },
+
+        invalidHandler: function (event, validator) { //display error alert on form submit
+            success1.hide();
+            error1.show();
+            App.scrollTo(error1, -200);
+        },
+
+        highlight: function (element) { // hightlight error inputs
+            $(element)
+                .closest('.form-group').addClass('has-error'); // set error class to the control group
+        },
+
+        unhighlight: function (element) { // revert the change done by hightlight
+            $(element)
+                .closest('.form-group').removeClass('has-error'); // set error class to the control group
+        },
+
+        success: function (label) {
+            label
+                .closest('.form-group').removeClass('has-error'); // set success class to the control group
+        },
+
+        submitHandler: function (form) {
+            success1.show();
+            error1.hide();
+        }
+    });
+
+    var KPI_name = '{{ KPI_name }}'
+    var name = '{{ name }}'
+
+{% if request.session.status == 1 or request.session.status == 2 %}
+    flag = 0
+{% elif request.session.status == 3 or request.session.status == 4 or request.session.status == 5 %}
+    flag = 1
+{% elif request.session.status == 6 or request.session.status == 7 %}
+    flag = 2
+{% endif %}
+{% if request.session.status != 3 %}
+    $('#self_comment').attr('disabled',true)
+    $('#grade').attr('disabled',true)
+{% endif %}
+    $('#supervisor_comment').attr('disabled',true)
+    $('#principal_comment').attr('disabled',true)
+
+    $('#self_comment').val('{{ self_comment }}')
+    $('#supervisor_comment').val('{{ supervisor_comment }}')
+    $('#principal_comment').val('{{ principal_comment }}')
+
+    $('#back').on('click',function(){
+        history.go(-1)
+    })
+
+    $('#commit').on('click',function(){
+        var oTT = TableTools.fnGetInstance('datatables');
+        oTT.fnSelectAll()
+        var aData = oTT.fnGetSelectedData();
+        var sum = 0
+        for (var i in aData){
+            sum += aData[i][2]
+        {% if request.session.status == 3 %}
+            if ($.cookie('flag') != 0) {
+                if (aData[i][3] == '0') {
+                    oTT.fnSelectNone()
+                    toastr.error('请完成自我评分')
+                    return
+                }
+            }
+        {% endif %}
+        }
+        oTT.fnSelectNone()
+        if (sum != 100){
+            toastr.error('请设定权重的总数为100%')
+            return
+        }
+        $("#myModal2").modal('show')
+    })
+
+    $('#commit_button').on('click',function(){
+    {% if request.session.status == 3 %}
+        if ($.cookie('flag') == 0){
+            flag = 0
+        }
+
+        var self_comment = $('#self_comment').val()
+        if (self_comment == ''){
+            toastr.error('请填写个人评价')
+            return
+        }
+        if (self_comment.length < 10) {
+            toastr.error('请填写评价勿少于10个字')
+            return
+        }
+        $.post('/KPI_table_detail_comment_save/', {self_comment:self_comment,KPI_name:KPI_name,name:name}, function (d) {
+            showAjaxLoad()
+            if (d.code == 1) {
+                toastr.error(d.msg)
+                hideAjaxLoad()
+                $("#myModal2").modal('hide')
+                return
+            }
+            $.post('/KPI_table_detail_commit/', {KPI_name:KPI_name,name:name,flag:flag}, function (d) {
+                $("#myModal2").modal('hide')
+                hideAjaxLoad()
+                if (d.code == 0) {
+                    toastr.success(d.msg)
+                    setTimeout('location.href = "/KPI_table/"',500)
+                } else {
+                    toastr.error(d.msg)
+                }
+                $.cookie('flag', null);
+            })
+        })
+    {% else %}
+        showAjaxLoad()
+        $.post('/KPI_table_detail_commit/', {KPI_name:KPI_name,name:name,flag:flag}, function (d) {
+            $("#myModal2").modal('hide')
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                setTimeout('location.href = "/KPI_table/"',500)
+            } else {
+                toastr.error(d.msg)
+            }
+        })
+    {% endif %}
+{#        showAjaxLoad()#}
+    })
+
+    $('#refuse_button').on('click',function(){
+        $("#myModal3").modal('hide')
+    })
+    {% if request.session.status == 1 and rejected_reason != ''%}
+        $("#myModal3").modal('show')
+    {% endif %}
+
+    aButtons = [
+        {% if request.session.status == 1 %}
+            {
+                "sExtends": 'text',
+                "sButtonText": '<font color="white">添加</font><i class="fa fa-plus"></i>',
+                "sButtonClass": "btn green ",
+                "fnComplete": function (nButton, oConfig, nRow) {
+                    add_()
+                }
+            },
+{#            {#}
+{#                "sExtends": 'text',#}
+{#                "sButtonText": '<font color="white">编辑</font><i class="fa fa-edit"></i>',#}
+{#                "sButtonClass": "btn blue ",#}
+{#                "fnComplete": function (nButton, oConfig, nRow) {#}
+{#                    edit_()#}
+{#                }#}
+{#            },#}
+{#            {#}
+{#                "sExtends": 'text',#}
+{#                "sButtonText": '<font color="white">删除</font><i class="fa fa-times"></i>',#}
+{#                "sButtonClass": "btn red ",#}
+{#                "fnComplete": function (nButton, oConfig, nRow) {#}
+{#                    del_()#}
+{#                }#}
+{#            },#}
+        {% endif %}
+{#        {% if request.session.status == 3 %}#}
+{#            {% if request.COOKIES.flag != '0' %}#}
+{#            {#}
+{#                "sExtends": 'text',#}
+{#                "sButtonText": '<font color="white">评分</font><i class="fa fa-pencil"></i>',#}
+{#                "sButtonClass": "btn purple ",#}
+{#                "fnComplete": function (nButton, oConfig, nRow) {#}
+{#                    grade_()#}
+{#                }#}
+{#            },#}
+{#                {% endif %}#}
+{#        {% endif %}#}
+        ]
+    loaddata()
+    HidAllElement()
+});
+
+//隐藏/显示
+function HidAllElement() {
+    var this_oTable = $("#datatables").dataTable()
+    var navigation_text = '绩效考评详情'
+    var hidcolum_list = []
+    var hiddiv_list = []
+{#div_cose,div_self,div_supervisor,div_principal#}
+    {% if request.session.status == 1 or request.session.status == 2 %}
+        navigation_text = '设定目标'
+        hidcolum_list.push(3,4,5,6,7,8)
+        hiddiv_list.push('div_cose','div_self','div_supervisor','div_principal')
+    {% elif request.session.status == 3 %}
+        navigation_text = '员工自评'
+        hidcolum_list.push(5,6,7,8)
+        hiddiv_list.push('div_supervisor','div_principal','div_cose_supervisor','div_cose_principal')
+    {% elif request.session.status == 4 %}
+        navigation_text = '待直属主管评分'
+        hidcolum_list.push(5,6,7,8)
+        hiddiv_list.push('div_supervisor','div_principal','div_cose_supervisor','div_cose_principal')
+    {% elif request.session.status == 5 %}
+        navigation_text = '待中心负责人评分'
+        hidcolum_list.push(7,8)
+        hiddiv_list.push('div_principal','div_cose_principal')
+    {% elif request.session.status == 6 %}
+        navigation_text = '待HR公示评定等级'
+    {% elif request.session.status == 7 %}
+        navigation_text = '待员工最终确认'
+    {% elif request.session.status == 8 %}
+        navigation_text = '已完成'
+    {% endif %}
+
+    {% if request.session.status != 1 and request.session.status != 3%}
+        hidcolum_list.push(9)
+    {% endif %}
+
+
+
+    $("#modal_title").html(navigation_text)
+    $("#navigation_text").html(navigation_text)
+
+    $.each([0,1,2,3,4,5,6,7,8,9], function(index,value) {
+        this_oTable.fnSetColumnVis(value, true);
+    });
+    $.each(hidcolum_list, function(index,value) {
+        this_oTable.fnSetColumnVis(value, false);
+    });
+    $.each(hiddiv_list, function(index,value) {
+        $('#'+ value).attr("style","display:none;");//隐藏div
+    })
+ };
+
+function loaddata() {
+    oTable = $('#datatables').dataTable({
+        "sAjaxSource": "/KPI_table_detail_data/?rand=" + Math.random(),
+        "sDom": "<'row-fluid'<'span6'T><'span6'f>r><'table-scrollable't><'fluid'<'span3'l><'span4'i><'span5'p>>",
+        "bServerSide": true,
+        "bPaginate": true, // 是否使用分页
+        "bProcessing": true, //是否显示正在处理的提示
+        "bLengthChange": true, //是否启用设置每页显示记录数
+        "bFilter": true, //是否使用搜索
+        "bStateSave": true,
+        "bDestroy": true,
+        "bSort": true, //是否使用排序
+        "bAutoWidth": true, //列的宽度会根据table的宽度自适应
+        "sPaginationType": "bootstrap",
+//        "aLengthMenu": [
+//                    [5, 15, 20, -1],
+//                    [5, 15, 20, "All"] // change per page values here
+//                ],
+        "oTableTools": {
+            "sRowSelect": "single",
+            'aButtons': aButtons
+        },
+        "aoColumns": [
+            { "mData": "0","sClass": "center", 'sWidth': "10%"},
+            { "mData": "1","sClass": "center", 'sWidth': "10%"},
+            { "mData": "2", "sClass": "center", 'sWidth': "10%"},
+            { "mData": "3", "sClass": "center", 'sWidth': "10%"},
+            { "mData": "4", "sClass": "center", 'sWidth': "10%"},
+            { "mData": "5", "sClass": "center", 'sWidth': "10%"},
+            { "mData": "6", "sClass": "center", 'sWidth': "10%"},
+            { "mData": "7", "sClass": "center", 'sWidth': "10%"},
+            { "mData": "8", "sClass": "center", 'sWidth': "10%"},
+            {
+                "mData": function (data, type, full) {
+                    var str = "";
+                    {% if request.session.status == 1 %}
+                    str += '<button class="btn btn-sm blue" style="margin-right:10" onclick=\'edit_new(' + JSON.stringify(data) + ')\'>编辑<i class="fa fa-edit"></i></button>';
+                    str += '<button class="btn btn-sm red" onclick=\'del_new(' + JSON.stringify(data) + ')\'>删除<i class="fa fa-times"></i></button>';
+                    {% endif %}
+                    {% if request.session.status == 3 %}
+                        {% if request.COOKIES.flag != '0' %}
+                            str += '<button class="btn btn-sm purple" onclick=\'grade_new(' + JSON.stringify(data) + ')\'>评分<i class="fa fa-pencil"></i></button>';
+                        {% endif %}
+                    {% endif %}
+                    if (str == "")
+                        str = "-无-"
+                    return str;
+                },
+                "sClass": "left",'bVisible': true
+            },
+
+{#            { "mData": "9", "sClass": "center", 'sWidth': "5%", 'bVisible': false},#}
+{#            { "mData": "10", "sClass": "center", 'sWidth': "5%", 'bVisible': false},#}
+{#            { "mData": "11", "sClass": "center", 'sWidth': "5%", 'bVisible': false}#}
+        ],
+        "aaSorting": [
+            [0, 'asc']
+        ],
+        "oLanguage": {
+            "sProcessing": "正在加载数据...",
+            'sSearch': '数据筛选:',
+            "sLengthMenu": "每页显示 _MENU_ 项记录",
+            "sZeroRecords": "没有符合项件的数据...",
+            "sInfo": "当前数据为从第 _START_ 到第 _END_ 项数据；总共有 _TOTAL_ 项记录",
+            "sInfoEmpty": "显示 0 至 0 共 0 项",
+            "sInfoFiltered": "(_MAX_)",
+            "oPaginate": {
+                "sFirst": '首页',
+                "sPrevious": "上一页",
+                "sNext": "下一页",
+                "sLast": "最后一页"
+            }
+
+        },
+{#        "fnInitComplete": function (oSettings, json) {#}
+{#            $('input[type=checkbox],input[type=radio],input[type=file]').uniform()#}
+{#        },#}
+        "fnDrawCallback": function (oSettings) {
+            $('input[type=checkbox],input[type=radio],input[type=file]').uniform()
+            total_score()
+        },
+        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            $('td:eq(2)',nRow).html(aData[2]+'%')
+        },
+        "fnServerData": function (sSource, aoData, fnCallback) {
+            aoData.push({csrfmiddlewaretoken: '{{ csrf_token }}'})
+            $.ajax({
+                "dataType": 'json',
+                "type": "POST",
+                "url": sSource,
+                "data": aoData,
+                "success": fnCallback
+            });
+        }
+    });
+}
+
+function total_score(){
+    var oTT = TableTools.fnGetInstance('datatables');
+    oTT.fnSelectAll()
+    var aData = oTT.fnGetSelectedData();
+    oTT.fnSelectNone()
+    var self_total_score = 0
+    var supervisor_total_score = 0
+    var principal_total_score = 0
+    for (var i in aData){
+        self_total_score += aData[i][4]
+        supervisor_total_score += aData[i][6]
+        principal_total_score += aData[i][8]
+    }
+    $('#self_total_score').val(round(self_total_score,2))
+    {% if request.session.status == 3 %}
+        $('#score_html').html('您确定要提交吗<br><h5>您打的总分为：<span style="color:green">' + round(self_total_score,2)+'</span></h5>')
+    {% endif %}
+    $('#supervisor_total_score').val(round(supervisor_total_score,2))
+    $('#principal_total_score').val(round(principal_total_score,2))
+}
+
+function round(v,e){
+    var t=1;
+    for(;e>0;t*=10,e--);
+    for(;e<0;t/=10,e++);
+    return Math.round(v*t)/t;
+}
+
+function add_(){
+    $('#id').val('')
+    grade_operation = 0
+    $('#objective').attr('disabled',false)
+    $('#description').attr('disabled',false)
+    $('#grade').attr('disabled',true)
+    var oTT = TableTools.fnGetInstance('datatables');
+    oTT.fnSelectAll()
+    var aData = oTT.fnGetSelectedData();
+    oTT.fnSelectNone()
+    if (aData.length >= 5) {
+        toastr.error('目标上限为5条')
+        return
+    }
+
+    $('id').val('')
+    $('#objective').val('')
+    $('#description').val('')
+    $("#slider-snap-inc").slider({
+        isRTL: App.isRTL(),
+        value: 50,
+        min: 0,
+        max: 100,
+        step: 5,
+        slide: function (event, ui) {
+            $("#slider-snap-inc-amount").text(ui.value + "%");
+        }
+    });
+    $("#slider-snap-inc-amount").text(50 + "%");
+    $('#grade').val('')
+    $("#myModal").modal('show')
+}
+
+function edit_(){
+    grade_operation = 0
+    $('#objective').attr('disabled',false)
+    $('#description').attr('disabled',false)
+    $('#grade').attr('disabled',true)
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = oTT.fnGetSelectedData();
+    if (aData.length == 1) {
+        var objective = aData[0][0];
+        objective = objective.split('<br>')
+        objective = objective.join('\n')
+        objective = objective.replace(/&nbsp/g,' ')
+        var description = aData[0][1];
+        description = description.split('<br>')
+        description = description.join('\n')
+        description = description.replace(/&nbsp/g,' ')
+        var weight = aData[0][2];
+        var grade = 0;
+    {% if request.session.status == 3 %}
+        var grade = aData[0][3];
+    {% endif %}
+    {% if request.session.status == 4 %}
+        var grade = aData[0][5];
+    {% endif %}
+    {% if request.session.status == 5 %}
+        var grade = aData[0][7];
+    {% endif %}
+        var id = aData[0][11];
+        $('#objective').val(objective)
+        $('#description').val(description)
+        $("#slider-snap-inc").slider({
+            isRTL: App.isRTL(),
+            value: weight,
+            min: 0,
+            max: 100,
+            step: 5,
+            slide: function (event, ui) {
+                $("#slider-snap-inc-amount").text(ui.value + "%");
+            }
+        });
+        $("#slider-snap-inc-amount").text(weight + "%");
+        $('#grade').val(grade)
+        $('#id').val(id)
+        $("#myModal").modal('show')
+    }
+}
+
+function edit_new(_data){
+    grade_operation = 0
+    $('#objective').attr('disabled',false)
+    $('#description').attr('disabled',false)
+    $('#grade').attr('disabled',true)
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = _data;
+    if (aData != undefined) {
+        var objective = aData[0];
+        objective = objective.split('<br>')
+        objective = objective.join('\n')
+        objective = objective.replace(/&nbsp/g,' ')
+        var description = aData[1];
+        description = description.split('<br>')
+        description = description.join('\n')
+        description = description.replace(/&nbsp/g,' ')
+        var weight = aData[2];
+        var grade = 0;
+    {% if request.session.status == 3 %}
+        var grade = aData[3];
+    {% endif %}
+    {% if request.session.status == 4 %}
+        var grade = aData[5];
+    {% endif %}
+    {% if request.session.status == 5 %}
+        var grade = aData[7];
+    {% endif %}
+        var id = aData[11];
+        $('#objective').val(objective)
+        $('#description').val(description)
+        $("#slider-snap-inc").slider({
+            isRTL: App.isRTL(),
+            value: weight,
+            min: 0,
+            max: 100,
+            step: 5,
+            slide: function (event, ui) {
+                $("#slider-snap-inc-amount").text(ui.value + "%");
+            }
+        });
+        $("#slider-snap-inc-amount").text(weight + "%");
+        $('#grade').val(grade)
+        $('#id').val(id)
+        $("#myModal").modal('show')
+    }
+}
+
+function isNumber(value) {         //验证是否为数字
+    var patrn = /^(([1-9][0-9]?)|0)((\.[0-9][1-9])|(\.[1-9]))?$/;
+    if (patrn.test(value)|| value == 100) {
+        return true
+    } else {
+        return false
+    }
+}
+
+$('#save').on('click',function() {
+    if ($('#from_grade').hasClass('has-error')){
+        toastr.error('请填写数字');
+        return
+    }
+    obj = $('#grade').val()
+
+    {% if request.session.status == 3 %}
+    if (isNumber(obj) == false) {
+        toastr.error('填写正确的评分（0-100 可精确至小数点后两位');
+        return
+    }
+    {% endif %}
+
+    var objective = $('#objective').val();
+    var description = $('#description').val();
+    var weight = $('#slider-snap-inc').slider("option","value");
+    var grade = $('#grade').val()
+    var id = $('#id').val();
+    if (objective == '' || description == '' || weight == '') {
+        toastr.error('不能有空白');
+        return;
+    }
+    showAjaxLoad();
+    $(self).button('loading');//正在登陆中，显示data-loading-text 标记内容
+
+    $.ajax({
+        url: '/KPI_table_detail_save/',
+        type: "POST",
+        data: {
+            objective: objective,
+            description: description,
+            weight: weight,
+            grade: grade,
+            status: {{ request.session.status }},
+            id:id
+        },
+        success: function (d) {
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                $('#datatables').dataTable().fnDraw()
+{#                if (grade_operation != 1){#}
+{#                    {% if request.session.status == 3 %}#}
+{#                    $.cookie('flag', 0, {expires: 1})#}
+{#                    {% endif %}#}
+{#                    if ($.cookie('flag') == 0) {#}
+{#                        if ($('#ToolTables_datatables_3').length > 0) {#}
+{#                            $('#ToolTables_datatables_3')[0].style.display = 'none'#}
+{#                        }#}
+{#                    }#}
+{#                }#}
+            } else {
+                toastr.error(d.msg)
+            }
+        }
+    });
+    $('#myModal').modal('hide')
+    $(self).button('complete')
+})
+
+function del_() {
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = oTT.fnGetSelectedData();
+    if (aData.length == 1) {
+        showAjaxLoad()
+        $.post('/KPI_table_detail_del/', {id: aData[0][11]}, function (d) {
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                $('#datatables').dataTable().fnDraw()
+{#                $.cookie('flag',0,{ expires: 1 })#}
+{#                if ($.cookie('flag') == 0) {#}
+{#                    if ($('#ToolTables_datatables_3').length > 0) {#}
+{#                        $('#ToolTables_datatables_3')[0].style.display = 'none'#}
+{#                    }#}
+{#                }#}
+            } else {
+                toastr.error(d.msg)
+            }
+        })
+    }
+    $('#myModal').modal('hide')
+}
+
+function del_new(_data) {
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = _data;
+    if (aData != undefined) {
+        showAjaxLoad()
+        $.post('/KPI_table_detail_del/', {id: aData[11]}, function (d) {
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                $('#datatables').dataTable().fnDraw()
+{#                $.cookie('flag',0,{ expires: 1 })#}
+{#                if ($.cookie('flag') == 0) {#}
+{#                    if ($('#ToolTables_datatables_3').length > 0) {#}
+{#                        $('#ToolTables_datatables_3')[0].style.display = 'none'#}
+{#                    }#}
+{#                }#}
+            } else {
+                toastr.error(d.msg)
+            }
+        })
+    }
+    $('#myModal').modal('hide')
+}
+
+function grade_(){
+    $('#objective').attr('disabled',true)
+    $('#description').attr('disabled',true)
+    $('#grade').attr('disabled',false)
+    $('#slider-snap-inc').hide()
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = oTT.fnGetSelectedData();
+    if (aData.length == 1) {
+        var objective = aData[0][0];
+        objective = objective.split('<br>')
+        objective = objective.join('\n')
+        objective = objective.replace(/&nbsp/g,' ')
+        var description = aData[0][1];
+        description = description.split('<br>')
+        description = description.join('\n')
+        description = description.replace(/&nbsp/g,' ')
+        var weight = aData[0][2];
+    {% if request.session.status == 3 %}
+        var grade = aData[0][3];
+    {% endif %}
+    {% if request.session.status == 4 %}
+        var grade = aData[0][5];
+    {% endif %}
+    {% if request.session.status == 5 %}
+        var grade = aData[0][7];
+    {% endif %}
+        var id = aData[0][11];
+        $('#objective').val(objective)
+        $('#description').val(description)
+        $("#slider-snap-inc").slider({
+            isRTL: App.isRTL(),
+            value: weight,
+            min: 0,
+            max: 100,
+            step: 5,
+            slide: function (event, ui) {
+                $("#slider-snap-inc-amount").text(ui.value + "%");
+            }
+        });
+        $("#slider-snap-inc-amount").text(weight + "%");
+        $('#grade').val(grade)
+        $('#id').val(id)
+        grade_operation = 1
+        $("#myModal").modal('show')
+    }
+}
+
+function grade_new(_data){
+    $('#objective').attr('disabled',true)
+    $('#description').attr('disabled',true)
+    $('#grade').attr('disabled',false)
+    $('#slider-snap-inc').hide()
+    var aData = _data;
+    if (aData != undefined) {
+        var objective = aData[0];
+        objective = objective.split('<br>')
+        objective = objective.join('\n')
+        objective = objective.replace(/&nbsp/g,' ')
+        var description = aData[1];
+        description = description.split('<br>')
+        description = description.join('\n')
+        description = description.replace(/&nbsp/g,' ')
+        var weight = aData[2];
+    {% if request.session.status == 3 %}
+        var grade = aData[3];
+    {% endif %}
+    {% if request.session.status == 4 %}
+        var grade = aData[5];
+    {% endif %}
+    {% if request.session.status == 5 %}
+        var grade = aData[7];
+    {% endif %}
+        var id = aData[11];
+        $('#objective').val(objective)
+        $('#description').val(description)
+        $("#slider-snap-inc").slider({
+            isRTL: App.isRTL(),
+            value: weight,
+            min: 0,
+            max: 100,
+            step: 5,
+            slide: function (event, ui) {
+                $("#slider-snap-inc-amount").text(ui.value + "%");
+            }
+        });
+        $("#slider-snap-inc-amount").text(weight + "%");
+        $('#grade').val(grade)
+        $('#id').val(id)
+        grade_operation = 1
+        $("#myModal").modal('show')
+    }
+}
+
+function myrefresh() {
+    $('#datatables').dataTable().fnDraw()
+}
+
+setInterval("myrefresh()",10000);
+
+</script>
+{% endblock %}

@@ -1,0 +1,398 @@
+                <li id="main" class="start">
+					<a href="/main/">
+						<i class="fa fa-home"></i>
+						<span class="title">
+							主页
+						</span>
+						<span class="selected">
+						</span>
+					</a>
+				</li>
+                <li id="user_manage">
+					<a href="javascript:;">
+						<i class="fa fa-user"></i>
+						<span class="title">
+							用户管理
+						</span>
+						<span class="arrow ">
+						</span>
+					</a>
+					<ul class="sub-menu">
+						<li id="chpasswd">
+							<a href="/chpasswd/" name="修改密码">
+								<i class="fa"></i>
+								修改密码
+							</a>
+						</li>
+					</ul>
+				</li>
+{#                <li id="order_manage">#}
+{#					<a href="javascript:;">#}
+{#						<i class="fa fa-cutlery"></i>#}
+{#						<span class="title">#}
+{#							订餐管理#}
+{#						</span>#}
+{#						<span class="arrow ">#}
+{#						</span>#}
+{#					</a>#}
+{#					<ul class="sub-menu">#}
+{#                        <li id="order_form">#}
+{#							<a href="/order_form/">#}
+{#								<i class="fa"></i>#}
+{#								订餐#}
+{#							</a>#}
+{#						</li>#}
+{#					</ul>#}
+{#				</li>#}
+                <li id="form">
+					<a href="javascript:;">
+						<i class="fa fa-file-text-o"></i>
+						<span class="title">
+							常用表单
+						</span>
+						<span class="arrow ">
+						</span>
+					</a>
+                    <ul class="sub-menu">
+                        <li id="used_form">
+							<a href="/used_form/">
+								<i class="fa"></i>
+								常用表单
+							</a>
+						</li>
+                    </ul>
+                </li>
+                <li id="organization">
+					<a href="javascript:;">
+						<i class="fa fa-file-text-o"></i>
+						<span class="title">
+							组织架构
+						</span>
+						<span class="arrow ">
+						</span>
+					</a>
+                    <ul class="sub-menu">
+                        <li id="organization_main">
+							<a href="/organization_main/">
+								<i class="fa"></i>
+								组织架构图
+							</a>
+						</li>
+                    </ul>
+                </li>
+                <li id="vacation">
+					<a href="javascript:;">
+						<i class="fa fa-coffee"></i>
+						<span class="title">
+							请假管理
+						</span>
+						<span class="arrow ">
+						</span>
+					</a>
+					<ul class="sub-menu">
+                        <li id="vacation_apply">
+							<a href="/vacation_apply/">
+								<i class="fa"></i>
+								请假申请
+							</a>
+						</li>
+                        <li id="vacation_approve">
+							<a href="/vacation_approve/">
+								<i class="fa"></i>
+								请假待审批
+							</a>
+						</li>
+                        <li id="vacation_all">
+							<a href="/vacation_all/">
+								<i class="fa"></i>
+								全部请假
+							</a>
+						</li>
+                        {% if request.session.vacation_can_view %}
+                        <li id="vacation_table">
+                            <a href="/vacation_table/">
+                                <i class="fa"></i>
+                                总览表
+                            </a>
+                        </li>
+                        <li id="vacation_log">
+							<a href="/vacation_log/">
+								<i class="fa"></i>
+								日志记录
+							</a>
+                        </li>
+                        {% endif %}
+					</ul>
+				</li>
+                <li id="work_out">
+					<a href="javascript:;">
+						<i class="fa fa-plane"></i>
+						<span class="title">
+							公事外出
+						</span>
+						<span class="arrow ">
+						</span>
+					</a>
+					<ul class="sub-menu">
+                        <li id="work_out_apply">
+							<a href="/work_out_apply/">
+								<i class="fa"></i>
+								公事外出申请
+							</a>
+						</li>
+                        <li id="work_out_approve">
+							<a href="/work_out_approve/">
+								<i class="fa"></i>
+								公事外出审批
+							</a>
+						</li>
+                        <li id="work_out_all">
+							<a href="/work_out_all/">
+								<i class="fa"></i>
+								全部公事外出
+							</a>
+						</li>
+					</ul>
+				</li>
+{#                <li id="repay">#}
+{#					<a href="javascript:;">#}
+{#						<i class="fa fa-cny"></i>#}
+{#						<span class="title">#}
+{#							报销管理#}
+{#						</span>#}
+{#						<span class="arrow ">#}
+{#						</span>#}
+{#					</a>#}
+{#					<ul class="sub-menu">#}
+{#                        <li id="budget_table">#}
+{#							<a href="/budget_table/">#}
+{#								<i class="fa"></i>#}
+{#								预算表#}
+{#							</a>#}
+{#						</li>#}
+{#                        <li id="repay_apply_bank">#}
+{#							<a href="/repay_apply_bank/">#}
+{#								<i class="fa"></i>#}
+{#								银行报销申请#}
+{#							</a>#}
+{#						</li>#}
+{#                        <li id="repay_approve">#}
+{#							<a href="/repay_approve/">#}
+{#								<i class="fa"></i>#}
+{#								报销审批#}
+{#							</a>#}
+{#						</li>#}
+{#                        <li id="repay_all">#}
+{#							<a href="/repay_all/">#}
+{#								<i class="fa"></i>#}
+{#								全部报销#}
+{#							</a>#}
+{#						</li>#}
+{#                        <li id="repay_log">#}
+{#							<a href="/repay_log/">#}
+{#								<i class="fa"></i>#}
+{#								操作日志#}
+{#							</a>#}
+{#						</li>#}
+{#					</ul>#}
+{#				</li>#}
+                <li id="business_trip">
+					<a href="javascript:;">
+						<i class="fa fa-plane"></i>
+						<span class="title">
+							出差管理
+						</span>
+						<span class="arrow ">
+						</span>
+					</a>
+					<ul class="sub-menu">
+                        <li id="business_trip_table">
+							<a href="/business_trip_table/">
+								<i class="fa"></i>
+								出差申请
+							</a>
+						</li>
+                        <li id="business_trip_approve">
+							<a href="/business_trip_approve/">
+								<i class="fa"></i>
+								出差审批
+							</a>
+						</li>
+					</ul>
+				</li>
+                <li id="contract">
+					<a href="javascript:;">
+						<i class="fa fa-pencil"></i>
+						<span class="title">
+							合同管理
+						</span>
+						<span class="arrow ">
+						</span>
+					</a>
+					<ul class="sub-menu">
+                        <li id="contract_apply">
+							<a href="/contract_apply/">
+								<i class="fa"></i>
+								合同申请
+							</a>
+						</li>
+                        <li id="contract_approve">
+							<a href="/contract_approve/">
+								<i class="fa"></i>
+								合同审批
+							</a>
+						</li>
+{#                        {% if request.session.contract_can_view_all %}#}
+                        <li id="contract_all">
+							<a href="/contract_all/">
+								<i class="fa"></i>
+								全部合同
+							</a>
+						</li>
+{#                        {% endif %}#}
+					</ul>
+				</li>
+            {% if request.session.contract_can_view_anchor_contract %}
+                <li id="anchor_contract">
+					<a href="javascript:;">
+						<i class="fa fa-pencil"></i>
+						<span class="title">
+							艺人合同
+						</span>
+						<span class="arrow ">
+						</span>
+					</a>
+					<ul class="sub-menu">
+                        <li id="anchor_contract_table">
+							<a href="/anchor_contract_table/">
+								<i class="fa"></i>
+								艺人合同管理
+							</a>
+						</li>
+					</ul>
+				</li>
+            {% endif %}
+                {% if request.session.assets_can_view %}
+                <li id="assets">
+					<a href="javascript:;">
+						<i class="fa fa-truck"></i>
+						<span class="title">
+							资产管理
+						</span>
+						<span class="arrow ">
+						</span>
+					</a>
+					<ul class="sub-menu">
+                        <li id="assets_table">
+							<a href="/assets_table/">
+								<i class="fa"></i>
+								万众资产表
+							</a>
+						</li>
+                        <li id="assets_table2">
+							<a href="/assets_table2/">
+								<i class="fa"></i>
+								六界资产表
+							</a>
+						</li>
+                        <li id="assets_table4">
+							<a href="/assets_table4/">
+								<i class="fa"></i>
+								陆色资产表
+							</a>
+						</li>
+                        <li id="assets_table3">
+							<a href="/assets_table3/">
+								<i class="fa"></i>
+								租赁资产表
+							</a>
+						</li>
+                        <li id="assets_log">
+							<a href="/assets_log/">
+								<i class="fa"></i>
+								资产流动记录
+							</a>
+						</li>
+					</ul>
+				</li>
+                {% endif %}
+                <li id="KPI">
+					<a href="javascript:;">
+						<i class="fa fa-calendar"></i>
+						<span class="title">
+							绩效管理
+						</span>
+						<span class="arrow ">
+						</span>
+					</a>
+					<ul class="sub-menu">
+                        <li id="KPI_table">
+							<a href="/KPI_table/">
+								<i class="fa"></i>
+								绩效考评
+							</a>
+						</li>
+                        <li id="KPI_table_approve">
+							<a href="/KPI_table_approve/">
+								<i class="fa"></i>
+								绩效待审批
+							</a>
+						</li>
+                        <li id="KPI_table_all">
+							<a href="/KPI_table_all/">
+								<i class="fa"></i>
+								全部绩效
+							</a>
+						</li>
+					</ul>
+				</li>
+                <li id="seal">
+					<a href="javascript:;">
+						<i class="fa fa-archive"></i>
+						<span class="title">
+							印章管理
+						</span>
+						<span class="arrow ">
+						</span>
+					</a>
+					<ul class="sub-menu">
+                        <li id="seal_apply">
+							<a href="/seal_apply/">
+								<i class="fa"></i>
+								印章申请
+							</a>
+						</li>
+                        <li id="seal_approve">
+							<a href="/seal_approve/">
+								<i class="fa"></i>
+								印章审批
+							</a>
+						</li>
+                        <li id="seal_all">
+							<a href="/seal_all/">
+								<i class="fa"></i>
+								全部印章
+							</a>
+						</li>
+					</ul>
+				</li>
+                {% if request.session.personal_information_can_view %}
+                <li id="personal_information">
+					<a href="javascript:;">
+						<i class="fa fa-users"></i>
+						<span class="title">
+							人员信息
+						</span>
+						<span class="arrow ">
+						</span>
+					</a>
+					<ul class="sub-menu">
+                        <li id="personal_information_table">
+							<a href="/personal_information_table/">
+								<i class="fa"></i>
+								人员基本信息表
+							</a>
+						</li>
+					</ul>
+				</li>
+                {% endif %}

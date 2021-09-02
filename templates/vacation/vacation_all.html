@@ -1,0 +1,498 @@
+{% extends 'public/index.html' %}
+{% block css %}
+<link href="/static/assets/theme/default/style.min.css" rel="stylesheet"/>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2-metronic.css"/>
+<link rel="stylesheet" href="/static/assets/css/DT_bootstrap.css"/>
+<!-- END PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-select/bootstrap-select.min.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/jquery-multi-select/css/multi-select.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css" />
+
+
+{% endblock %}
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet box grey tasks-widget">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-globe"></i>全部请假
+                </div>
+            </div>
+             <div class="form-inline portlet-body">
+                <div class="form-group">
+                    <label>申请人</label>
+                    <div class="input-group" style="display: inline-block;vertical-align: middle;">
+                        <span class="twitter-typeahead"
+                              style="position: relative; display: inline-block;">
+                            <input type="text" class="form-control tt-hint"
+                                   disabled="" autocomplete="off" spellcheck="false"
+                                   style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                            <div type="text" id="drp_user"
+                                name="typeahead_example_modal_1"
+                                class="form-control tt-input" autocomplete="off"
+                                spellcheck="false" dir="auto"
+                                style="width: 150px;position: relative; vertical-align: top; background-color: transparent;"></div><pre
+                                aria-hidden="true"
+                                style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                class="tt-dropdown-menu"
+                                style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                class="tt-dataset-1"></div></span>
+                        </span>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label>所属中心</label>
+                    <div class="input-group" style="display: inline-block;vertical-align: middle;">
+                        <span class="twitter-typeahead"
+                              style="position: relative; display: inline-block;">
+                            <input type="text" class="form-control tt-hint"
+                                   disabled="" autocomplete="off" spellcheck="false"
+                                   style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                            <div type="text" id="drp_department"
+                                name="typeahead_example_modal_1"
+                                class="form-control tt-input" autocomplete="off"
+                                spellcheck="false" dir="auto"
+                                style="width: 200px;position: relative; vertical-align: top; background-color: transparent;"></div><pre
+                                aria-hidden="true"
+                                style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                class="tt-dropdown-menu"
+                                style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                class="tt-dataset-1"></div>
+                            </span>
+                        </span>
+                    </div>
+                 </div>
+                 <div class="form-group">
+                    <label>上级主管</label>
+                    <div class="input-group" style="display: inline-block;vertical-align: middle;">
+                        <span class="twitter-typeahead"
+                              style="position: relative; display: inline-block;">
+                            <input type="text" class="form-control tt-hint"
+                                   disabled="" autocomplete="off" spellcheck="false"
+                                   style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                            <div type="text" id="drp_supervisor"
+                                name="typeahead_example_modal_1"
+                                class="form-control tt-input" autocomplete="off"
+                                spellcheck="false" dir="auto"
+                                style="width: 150px;position: relative; vertical-align: top; background-color: transparent;"></div><pre
+                                aria-hidden="true"
+                                style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                class="tt-dropdown-menu"
+                                style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                class="tt-dataset-1"></div></span>
+                        </span>
+                    </div>
+                 </div>
+                 <div class="form-group">
+                    <label>数据筛选</label>
+                    <input type="text" class="form-control" id="inp_search">
+                 </div>
+                 <button type="button" class="btn btn-primary" id="btn_seach">搜索</button>
+             </div>
+            <div class="portlet-body">
+                <table class="table table-striped table-bordered table-hover table-full-width"  id="datatables">
+                    <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>工作地点</th>
+                        <th>请假类型</th>
+                        <th>请假原由</th>
+                        <th>申请时间</th>
+                        <th>请假日期</th>
+                        <th>请假天数</th>
+                        <th>工作交接人</th>
+                        <th>状态</th>
+                        <th>审批状态</th>
+                        <th>ID</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4>您确定要批准吗</h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="agree()"><i class="fa fa-check"></i>确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4>请输入拒绝的理由</h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                            </div>
+                            <div class="form-group last">
+                                <label class="col-sm-4 control-label"></label>
+
+                                <div class="col-sm-6">
+                                    <textarea class="form-control" id='disagree_reason' style="width: 290px" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="disagree()"><i class="fa fa-check"></i>确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/datatables-->
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="/static/assets/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/DT_bootstrap.js"></script>
+
+<!--<script src="/static/assets/plugins/context.js"></script>-->
+<!--<script src="/static/assets/plugins/jstree/dist/jstree.min.js"></script>-->
+<script src="/static/assets/plugins/holder.js"></script>
+<script src="/static/assets/plugins/stilearn-base.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
+<script src="/static/assets/plugins/select2/select2.js"></script>
+<script src="/static/assets/plugins/datatables/extras/TableTools.min.js"></script>
+<script src="/static/assets/scripts/custom/table-managed.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-daterangepicker/daterangepicker.js" ></script>
+
+
+<script type="text/javascript">
+var oTable;
+var aButtons
+/* Formating function for row details */
+
+$(document).ready(function () {
+    loaddata()
+    init_drp_user()
+    init_drp_department()
+});
+function init_drp_user() {
+    $.post('/order_form_dropdown/', {}, function (d) {
+        $('#drp_user').select2({
+            multiple: false,
+            placeholder: '请假申请人',
+            allowClear: true,
+            data: d['list']
+        });
+        $('#drp_supervisor').select2({
+            multiple: false,
+            placeholder: '上级主管',
+            allowClear: true,
+            data: d['list']
+        });
+
+    })
+}
+
+function init_drp_department() {
+    $.post('/vacation_department_list/', {}, function (d) {
+        $('#drp_department').select2({
+            multiple: false,
+            placeholder: '请假所属中心',
+            allowClear: true,
+            data: d.data
+        });
+    })
+}
+function loaddata() {
+    oTable = $('#datatables').dataTable({
+        "sAjaxSource": "/vacation_all_data/?rand=" + Math.random(),
+        "sDom": "<'row-fluid'<'span6'T><'span6'f>r><'table-scrollable't><'fluid'<'span3'l><'span4'i><'span5'p>>",
+        "bServerSide": true,
+        "bPaginate": true, // 是否使用分页
+        "bProcessing": true, //是否显示正在处理的提示
+        "bLengthChange": true, //是否启用设置每页显示记录数
+        "bFilter": false, //是否使用搜索
+        "bStateSave": true,
+        "bDestroy": true,
+        "bSort": true, //是否使用排序
+        "sServerMethod": "post",
+        "bAutoWidth": true, //列的宽度会根据table的宽度自适应
+        "sPaginationType": "bootstrap",
+//        "aLengthMenu": [
+//                    [5, 15, 20, -1],
+//                    [5, 15, 20, "All"] // change per page values here
+//                ],
+        "oTableTools": {
+            "sRowSelect": "",
+            'aButtons': []
+        },
+        "aoColumns": [
+            { "sClass": "center", 'sWidth': "5%"},
+            { "sClass": "center", 'sWidth': "5%",'bSortable': false},
+            { "sClass": "center", 'sWidth': "5%"},
+            { "sClass": "center", 'sWidth': "15%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "15%"},
+            { "sClass": "center", 'sWidth': "5%"},
+            { "sClass": "center", 'sWidth': "5%"},
+            { "sClass": "center", 'sWidth': "10%", 'bVisible': false},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%", 'bVisible': false}
+        ],
+        "aaSorting": [
+            [4, 'desc']
+        ],
+        "oLanguage": {
+            "sProcessing": "正在加载数据...",
+{#            'sSearch': '数据筛选:',#}
+            "sLengthMenu": "每页显示 _MENU_ 项记录",
+            "sZeroRecords": "没有符合项件的数据...",
+            "sInfo": "当前数据为从第 _START_ 到第 _END_ 项数据；总共有 _TOTAL_ 项记录",
+            "sInfoEmpty": "显示 0 至 0 共 0 项",
+            "sInfoFiltered": "(_MAX_)",
+            "oPaginate": {
+                "sFirst": '首页',
+                "sPrevious": "上一页",
+                "sNext": "下一页",
+                "sLast": "最后一页"
+            }
+
+        },
+        "fnInitComplete": function (oSettings, json) {
+            $('input[type=checkbox],input[type=radio],input[type=file]').uniform()
+        },
+        "fnDrawCallback": function (oSettings) {
+            $('input[type=checkbox],input[type=radio],input[type=file]').uniform()
+        },
+        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            if(aData[8] == 1 || aData[8] == 2 || aData[8] == 3){
+                $('td:eq(8)',nRow).html('<div><img src="/static/assets/img/waiting.png">&nbsp'+aData[9]+'</div>')
+            }else if(aData[8] == 8){
+                $('td:eq(8)',nRow).html('<div><img src="/static/assets/img/running.png">&nbsp'+aData[9]+'</div>')
+            }else{
+                $('td:eq(8)',nRow).html('<div><img src="/static/assets/img/stoping.png">&nbsp'+aData[9]+'</div>')
+            }
+        },
+
+        //参数
+        "fnServerParams": function (aoData) {
+            var search_str = $("#inp_search").val();
+            var apply_user_list = $('#drp_user').select2('data');
+            var apply_department_list = $('#drp_department').select2('data');
+            var apply_supervisor_list = $('#drp_supervisor').select2('data');
+            var apply_department = ''
+            var apply_supervisor = ''
+            var apply_user = ''
+            if (apply_department_list != null)
+                apply_department = apply_department_list["text"]
+            if (apply_user_list != null)
+                apply_user = apply_user_list["text"]
+            if (apply_supervisor_list != null)
+                apply_supervisor = apply_supervisor_list["text"]
+
+            aoData.push(
+                {"name": "sSearch", "value": search_str},
+                {"name": "apply_user", "value": apply_user},
+                {"name": "apply_department", "value": apply_department},
+                {"name": "apply_supervisor", "value": apply_supervisor}
+            );
+        }
+    });
+
+    $('#btn_seach').click(function () {
+{#         oTable.ajax.reload(null, false);#}
+            oTable.dataTable().fnDraw()
+    })
+}
+
+function rule_save() {
+    var type = $('#type').select2('data');
+    var reason = $('#reason').val();
+    var vacation_date = $('#reportrange span').html().split('  -&gt;  ')
+    var begin = vacation_date[0]
+    var end = vacation_date[1]
+    var half_day = $('#half_day').select2('data');
+
+    if (type == null || reason == '') {
+        toastr.error('请填写完整')
+        return;
+    }
+
+    if (begin != end && half_day != null){
+        toastr.error('请假多天不能选择半天选项')
+        return;
+    }
+
+    if (half_day != null){
+        half_day = half_day['text']
+    }
+
+    showAjaxLoad()
+    $(self).button('loading');//正在登陆中，显示data-loading-text 标记内容
+
+
+    $.ajax({
+        url: '/vacation_apply_save/',
+        type: "POST",
+        data: {
+            type: type['text'],
+            reason: reason,
+            begin: begin,
+            end: end,
+            half_day: half_day
+        },
+        success: function (d) {
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                $('#datatables').dataTable().fnDraw()
+            } else {
+                toastr.error(d.msg)
+            }
+        }
+    });
+    $('#myModal').modal('hide')
+    $(self).button('complete')
+}
+function contain(Array, s) {
+    for (var i = 0; i < Array.length; i++)
+        if (Array[i] == s)
+            return true;
+    return false;
+}
+
+function agree_verify() {
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = oTT.fnGetSelectedData();
+    var flag = 0
+    if (aData.length >= 1) {
+        for (var i in aData) {
+            if (aData[i][8] == 8 || aData[i][8] == 9 || aData[i][8] == 0) {
+                toastr.error('这条申请已经审批过了')
+            } else {
+                flag += 1
+            }
+        }
+        if (flag == aData.length) {
+            $("#myModal2").modal('show')
+        }
+    }
+    else {
+        toastr.error('没有选择')
+    }
+}
+
+function agree() {
+    $('#myModal2').modal('hide')
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = oTT.fnGetSelectedData();
+    showAjaxLoad()
+    for (var i in aData) {
+        var dst_id = aData[i][10]
+        $.ajax({
+            url: '/vacation_approve_process/',
+            type: "POST",
+            async: false,
+            data: {
+                flag: 1,
+                dst_id: dst_id
+            },
+            success: function (d) {
+                hideAjaxLoad()
+                if (d.code == 0) {
+                    toastr.success(d.msg)
+                    $('#datatables').dataTable().fnDraw()
+                } else {
+                    toastr.error(d.msg)
+                }
+            }
+        });
+    }
+}
+
+function disagree_verify() {
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = oTT.fnGetSelectedData();
+    var flag = 0
+    if (aData.length >= 1) {
+        for (var i in aData) {
+            if (aData[i][8] == 8 || aData[i][8] == 9 || aData[i][8] == 0) {
+                toastr.error('这条申请已经审批过了')
+            } else {
+                flag += 1
+            }
+        }
+        if (flag == aData.length) {
+            $("#myModal3").modal('show')
+        }
+    }
+    else {
+        toastr.error('没有选择')
+    }
+}
+
+function disagree() {
+    $('#myModal3').modal('hide')
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = oTT.fnGetSelectedData();
+    showAjaxLoad()
+    for (var i in aData) {
+        var dst_id = aData[i][10]
+        var disagree_reason = $('#disagree_reason').val()
+        $.ajax({
+            url: '/vacation_approve_process/',
+            type: "POST",
+            async: false,
+            data: {
+                flag: 0,
+                dst_id: dst_id,
+                disagree_reason: disagree_reason
+            },
+            success: function (d) {
+                hideAjaxLoad()
+                if (d.code == 0) {
+                    toastr.success(d.msg)
+                    $('#datatables').dataTable().fnDraw()
+                } else {
+                    toastr.error(d.msg)
+                }
+            }
+        });
+    }
+}
+</script>
+{% endblock %}

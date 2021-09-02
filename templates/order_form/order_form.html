@@ -1,0 +1,793 @@
+{% extends 'public/index.html' %}
+{% block css %}
+<link href="/static/assets/theme/default/style.min.css" rel="stylesheet"/>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<!--<link href="/static/assets/css/select2.css" rel="stylesheet" />-->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2-metronic.css"/>
+<link rel="stylesheet" href="/static/assets/css/DT_bootstrap.css"/>
+<!-- END PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-select/bootstrap-select.min.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/jquery-multi-select/css/multi-select.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css" />
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-datepicker/css/datepicker.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/star-rating/css/star-rating.css"/>
+
+{% endblock %}
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-12">
+            <!-- BEGIN BORDERED TABLE PORTLET-->
+        {% if request.session.order_form_can_upload_menu %}
+            <form action="/upload_menu/" enctype="multipart/form-data" method="post">
+                <div class="col-md-6">
+                    <a id="menu_button" class="btn yellow" style="position:relative;width:100px;height:30px;display:inline-block;overflow:hidden;float:left">浏览...
+                        <input type="file" id="menu" name="menu" style="position:absolute;z-index:1;left:0;top:0;opacity:0;">
+                    </a>
+                    <a id="menu_show" style="float:left; padding-left: 5px; padding-top: 5px">请选择文件</a>
+                    <button class="btn btn-sm blue" type="submit" id="upload_conf" style="float:left; margin-left: 5px;">
+                        上传文件 <i class="fa fa-share"></i>
+                    </button>
+                </div>
+            </form>
+        {% endif %}
+            <div class="portlet box grey">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-cutlery"></i>一周菜单
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 7%">
+                            </th>
+                            <th>
+                                 周一
+                            </th>
+                            <th>
+                                 周二
+                            </th>
+                            <th>
+                                 周三
+                            </th>
+                            <th>
+                                 周四
+                            </th>
+                            <th>
+                                 周五
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td rowspan="2">
+                                 午餐
+                            </td>
+                            <td class="success">
+                                 {{ m11 }}
+                            </td>
+                            <td class="success">
+                                 {{ m21 }}
+                            </td>
+                            <td class="success">
+                                 {{ m31 }}
+                            </td>
+                            <td class="success">
+                                 {{ m41 }}
+                            </td>
+                            <td class="success">
+                                 {{ m51 }}
+                            </td>
+                        </tr>
+                        <tr class="danger">
+                            <td>
+                                 {{ m12 }}
+                            </td>
+                            <td>
+                                 {{ m22 }}
+                            </td>
+                            <td>
+                                 {{ m32 }}
+                            </td>
+                            <td>
+                                 {{ m42 }}
+                            </td>
+                            <td>
+                                 {{ m52 }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">
+                                 晚餐
+                            </td>
+                            <td class="success">
+                                 {{ m13 }}
+                            </td>
+                            <td class="success">
+                                 {{ m23 }}
+                            </td>
+                            <td class="success">
+                                 {{ m33 }}
+                            </td>
+                            <td class="success">
+                                 {{ m43 }}
+                            </td>
+                            <td class="success">
+                                 {{ m53 }}
+                            </td>
+                        </tr>
+                        <tr class="danger">
+                            <td>
+                                 {{ m14 }}
+                            </td>
+                            <td>
+                                 {{ m24 }}
+                            </td>
+                            <td>
+                                 {{ m34 }}
+                            </td>
+                            <td>
+                                 {{ m44 }}
+                            </td>
+                            <td>
+                                 {{ m54 }}
+                            </td>
+                        </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+                            <!-- END BORDERED TABLE PORTLET-->
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="col-md-2" style="margin-left:-15px; float: left">
+            <div id="reportrange" class="btn default">
+                <i class="fa fa-calendar"></i>
+                <span>
+                </span>
+                <b class="fa fa-angle-down"></b>
+            </div>
+        </div>
+        <div style="width: 9%;float:left">
+            <a href="/static/files/auto_alert.exe">
+                <h4>
+                    <span class="label label-info">每日订餐提醒工具下载</span>
+                </h4>
+            </a>
+        </div>
+        <div class="portlet box grey tasks-widget">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-globe"></i>订餐 (午餐11:00截止，晚餐16:00截止, 一键订餐11:00截止)
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class=" portlet-tabs">
+                    <ul class="nav nav-tabs">
+                        <li class="">
+                            <a href="#datatables_tab1" data-toggle="tab" id="tab2">
+                                 <b>晚餐</b>
+                            </a>
+                        </li>
+                        <li class="active" id="active_tab1">
+                            <a href="#datatables_tab1" data-toggle="tab" id="tab1">
+                                 <b>午餐</b>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="datatables_tab1">
+                            <table class="table table-striped table-bordered table-hover table-full-width"  id="datatables">
+                                <thead>
+                                <tr>
+                                    <th>已订餐名单</th>
+                                    <th>订餐类型</th>
+                                    <th>订餐状态</th>
+                                    <th>订餐时间</th>
+                                    <th>订餐者</th>
+                                    <th>星数</th>
+                                    <th>评论</th>
+                                    <th>ID</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">订餐</h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">姓名</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                                    <input type="text" class="form-control tt-hint"
+                                           disabled="" autocomplete="off" spellcheck="false"
+                                           style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                    <div type="text" id="name"
+                                         name="typeahead_example_modal_1"
+                                         class="form-control tt-input" autocomplete="off"
+                                         spellcheck="false" dir="auto"
+                                         style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"></div><pre
+                                        aria-hidden="true"
+                                        style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                        class="tt-dropdown-menu"
+                                        style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                        class="tt-dataset-1"></div></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">订餐类型</label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                                    <input type="text" class="form-control tt-hint"
+                                           disabled="" autocomplete="off" spellcheck="false"
+                                           style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                    <div type="text" id="type"
+                                         name="typeahead_example_modal_1"
+                                         class="form-control tt-input" autocomplete="off"
+                                         spellcheck="false" dir="auto"
+                                         style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"></div><pre
+                                        aria-hidden="true"
+                                        style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                        class="tt-dropdown-menu"
+                                        style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                        class="tt-dataset-1"></div></span></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="id" style="display: none"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="rule_save()"><i class="fa fa-check"></i>订餐</button>
+                <button type="button" class="btn btn-primary" onclick="last_rule_save()"><i class="fa fa-check"></i>与上次一样</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">评星</h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">订餐类型</label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                                    <input type="text" class="form-control tt-hint"
+                                           disabled="" autocomplete="off" spellcheck="false"
+                                           style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                    <div type="text" id="type1"
+                                         name="typeahead_example_modal_1"
+                                         class="form-control tt-input" autocomplete="off"
+                                         spellcheck="false" dir="auto"
+                                         style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"></div><pre
+                                        aria-hidden="true"
+                                        style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                        class="tt-dropdown-menu"
+                                        style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                        class="tt-dataset-1"></div></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">日期</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <div class="input-group input-medium date date-picker" style="float: left" data-date-format="yyyy-mm-dd" data-date-end-date="+31d" >
+
+                                    <input type="text" class="form-control" id='date' readonly="">
+                                    <span class="input-group-btn">
+                                        <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                                    </span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">评星</label>
+                        <div class="col-sm-6">
+                            <input id="star" value="0" type="number" class="rating" min="0" max="5" step="1" data-stars=5
+                            data-symbol="&#xe005;" data-default-caption="{rating} 星" data-star-captions="{}" data-size="xs" >
+                        </div>
+                    </div>
+                    <div class="form-group last">
+                        <label class="col-sm-4 control-label">评论</label>
+
+                        <div class="col-sm-6">
+                            <textarea class="form-control" id='comment' style="width: 290px" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="id" style="display: none"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="star_save()"><i class="fa fa-check"></i>保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4>您确定要删除吗</h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="del()"><i class="fa fa-check"></i>确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/datatables-->
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="/static/assets/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/DT_bootstrap.js"></script>
+
+{#<script src="/static/assets/plugins/context.js"></script>#}
+{#<script src="/static/assets/plugins/jstree/dist/jstree.min.js"></script>#}
+<script src="/static/assets/plugins/holder.js"></script>
+<script src="/static/assets/plugins/stilearn-base.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
+<script src="/static/assets/plugins/select2/select2.js"></script>
+<script src="/static/assets/plugins/datatables/extras/TableTools.min.js"></script>
+<script src="/static/assets/scripts/custom/table-managed.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-daterangepicker/daterangepicker.js" ></script>
+<script type="text/javascript" src="/static/assets/plugins/star-rating/js/star-rating.js" ></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
+
+<script type="text/javascript">
+var oTable;
+var aButtons
+/* Formating function for row details */
+
+$(document).ready(function () {
+    $('.date-picker').datepicker({
+        rtl: App.isRTL(),
+        autoclose: true,
+        defaultDate: 0
+    });
+    $('#date').val(moment().format('YYYY-MM-DD'))
+
+    $('#reportrange').daterangepicker({
+        opens: (App.isRTL() ? 'left' : 'right'),
+
+    //    startDate: moment().subtract('days', 29),
+    //    endDate: moment(),
+        minDate: '2012/01/01',
+        maxDate: '2028/12/31',
+        dateLimit: {
+            days: 2800
+        },
+        showDropdowns: true,
+        showWeekNumbers: false,
+        timePicker: false,
+        timePickerIncrement: 1,
+        timePicker12Hour: false,
+        ranges: {
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        buttonClasses: ['btn'],
+        applyClass: 'green',
+        cancelClass: 'default',
+        format: 'YYYY/MM/DD',
+        separator: ' to ',
+        locale: {
+            applyLabel: 'Apply',
+            fromLabel: 'From',
+            toLabel: 'To',
+            customRangeLabel: '自定义',
+            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            firstDay: 1
+        }
+        },
+        function (start, end) {
+            $('#reportrange span').html(start.format('YYYY-MM-DD') + '  ->  ' + end.format('YYYY-MM-DD'));
+            var begin = start.format('YYYY-MM-DD')
+            var end = end.format('YYYY-MM-DD')
+            $('#begin_time').val(begin)
+            $('#end_time').val(end)
+            var type = $('#active_tab1').attr('class')
+            if (type == 'active') {
+                loaddata(begin, end,'午餐')
+            }else{
+                loaddata(begin, end,'晚餐')
+            }
+{#            $('#datatables').dataTable().fnDraw()#}
+        }
+    );
+
+    $('#reportrange span').html(moment().format('YYYY-MM-DD') + '  ->  ' + moment().format('YYYY-MM-DD'))
+
+    var time = $('#reportrange span').html().split('  ')
+    var begin = time[0]
+    var end = time[2]
+
+    aButtons = [
+            {
+                "sExtends": 'text',
+
+                "sButtonText": '<font color="white">订餐 </font><i class="fa fa-plus"></i>',
+                "sButtonClass": "btn green ",
+                "fnComplete": function (nButton, oConfig, nRow) {
+                    add()
+                }
+
+            },
+            {
+                "sExtends": 'select',
+                "sButtonText": '<font color="white">删除 </font><i class="fa fa-times"></i>',
+                "sButtonClass": "btn btn-danger",
+                "fnComplete": function (nButton, oConfig, nRow) {
+                    del_verify()
+                }
+            },
+            {
+                "sExtends": 'text',
+                "sButtonText": '<font color="white">评星 </font><i class="fa fa-heart"></i>',
+                "sButtonClass": "btn yellow",
+                "fnComplete": function (nButton, oConfig, nRow) {
+                    star()
+                }
+
+            },
+        ]
+
+    loaddata(begin,end,'午餐')
+
+    $('#menu_button').on('change',function(){
+        $('#menu_show').html($('#menu').val())
+    })
+
+    if ('{{ menu_status }}' == 1){
+        toastr.success('保存成功')
+    }
+    if ('{{ menu_status }}' == 2){
+        toastr.error('保存失败')
+    }
+
+});
+
+
+
+function loaddata(begin,end,type) {
+    oTable = $('#datatables').dataTable({
+        "sAjaxSource": "/order_form_data/?rand=" + Math.random(),
+        "sDom": "<'row-fluid'<'span6'T><'span6'f>r><'table-scrollable't><'fluid'<'span3'l><'span4'i><'span5'p>>",
+        "bServerSide": true,
+        "bPaginate": true, // 是否使用分页
+        "bProcessing": true, //是否显示正在处理的提示
+        "bLengthChange": true, //是否启用设置每页显示记录数
+        "bFilter": true, //是否使用搜索
+        "bStateSave": true,
+        "bDestroy": true,
+        "bSort": true, //是否使用排序
+        "bAutoWidth": true, //列的宽度会根据table的宽度自适应
+        "sPaginationType": "bootstrap",
+        "iDisplayLength":50,
+        "aLengthMenu": [
+                    [50, 100, 200, 100000],
+                    [50, 100, 200, "All"] // change per page values here
+                ],
+        "oTableTools": {
+            "sRowSelect": "single",
+            'aButtons': aButtons
+        },
+        "aoColumns": [
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%", "bSortable": false},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "0%", 'bVisible': false}
+
+
+        ],
+        "aaSorting": [
+            [3, 'asc']
+        ],
+        "oLanguage": {
+            "sProcessing": "正在加载数据...",
+            'sSearch': '数据筛选:',
+            "sLengthMenu": "每页显示 _MENU_ 项记录",
+            "sZeroRecords": "没有符合项件的数据...",
+            "sInfo": "当前数据为从第 _START_ 到第 _END_ 项数据；总共有 _TOTAL_ 项记录",
+            "sInfoEmpty": "显示 0 至 0 共 0 项",
+            "sInfoFiltered": "(_MAX_)",
+            "oPaginate": {
+                "sFirst": '首页',
+                "sPrevious": "上一页",
+                "sNext": "下一页",
+                "sLast": "最后一页"
+            }
+
+        },
+        "fnInitComplete": function (oSettings, json) {
+{#            $('input[type=checkbox],input[type=radio],input[type=file]').uniform()#}
+            $('#star').rating();
+        },
+        "fnDrawCallback": function (oSettings) {
+{#            $('input[type=checkbox],input[type=radio],input[type=file]').uniform()#}
+            $('#star').rating();
+        },
+        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            if(aData[2] == '1'){
+                $('td:eq(2)',nRow).html('<div><img src="/static/assets/img/running.png">已订餐</div>')
+            }else{
+                $('td:eq(2)',nRow).html('<div><img src="/static/assets/img/stoping.png">已取消</div>')
+            }
+            if(aData[5] != '0') {
+                $('td:eq(5)', nRow).html('<div class="star-rating rating-x1 rating-active">\
+                                            <div title="Clear" class="clear-rating clear-rating-active"></div>\
+                                            <div class="rating-container rating-gly" data-content="">\
+                                                <div class="rating-stars" data-content="" style="width: ' + aData[5]/5*100 + '%;"></div>\
+                                            </div>\
+                                        </div>')
+            }else{
+                $('td:eq(5)', nRow).html('')
+            }
+
+        },
+        "fnServerData": function (sSource, aoData, fnCallback) {
+            aoData.push({"name": "begin", "value": begin});
+            aoData.push({"name": "end", "value": end});
+            aoData.push({"name": "type", "value": type})
+            $.ajax({
+                "dataType": 'json',
+                "type": "POST",
+                "url": sSource,
+                "data": aoData,
+                "success": fnCallback
+            });
+        }
+    });
+}
+
+$('#tab1').click(function(){
+    var time = $('#reportrange span').html().split('  ')
+    var begin = time[0]
+    var end = time[2]
+    loaddata(begin,end,'午餐')
+});
+
+$('#tab2').click(function(){
+    var time = $('#reportrange span').html().split('  ')
+    var begin = time[0]
+    var end = time[2]
+    loaddata(begin,end,'晚餐')
+});
+
+function rule_save() {
+    var name = $('#name').select2('data')
+    var type = $('#type').select2('data')
+    if (name == '' || type == null) {
+        toastr.error('不能为空')
+        return;
+    }
+    var name_list = []
+    for (var i in name) {
+        name_list.push(name[i]["text"])
+    }
+    name = name_list.join(',')
+{#    var type = $('#type').select2('data')#}
+    type = type["text"]
+    var id = $('#id').val();
+
+    showAjaxLoad()
+    $(self).button('loading');//正在登陆中，显示data-loading-text 标记内容
+
+
+    $.ajax({
+        url: '/order_form_save/',
+        type: "POST",
+        data: {
+            id: id,
+            name: name,
+            type: type
+        },
+        success: function (d) {
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                $('#datatables').dataTable().fnDraw()
+            } else {
+                toastr.error(d.msg)
+            }
+        }
+    });
+    $('#myModal').modal('hide')
+    $(self).button('complete')
+}
+
+
+
+function last_rule_save() {
+    showAjaxLoad()
+    $(self).button('loading');//正在登陆中，显示data-loading-text 标记内容
+
+    $.ajax({
+        url: '/last_order_form_save/',
+        type: "POST",
+        data: {},
+        success: function (d) {
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                $('#datatables').dataTable().fnDraw()
+            } else {
+                toastr.error(d.msg)
+            }
+        }
+    });
+    $('#myModal').modal('hide')
+    $(self).button('complete')
+}
+
+
+
+
+
+
+function contain(Array, s) {
+    for (var i = 0; i < Array.length; i++)
+        if (Array[i] == s)
+            return true;
+    return false;
+}
+function add() {
+    $('#name').select2("data", "")
+    $.post('/order_form_dropdown/', {}, function (d) {
+        $('#name').select2({
+            multiple: true,
+            placeholder: '请选择被订餐者',
+            allowClear: true,
+            data: d['list']
+        });
+    })
+    $('#type').select2("data", "")
+    $('#type').select2({
+        multiple: false,
+        placeholder: '选择订餐类型',
+        allowClear: true,
+        data: [{'text':'午餐','id':1},{'text':'晚餐','id':2}]
+    });
+    $('#id').val("")
+    $("#myModal").modal('show')
+}
+
+function star() {
+    $('#type1').select2("data", "")
+    $('#type1').select2({
+        multiple: false,
+        placeholder: '选择订餐类型',
+        allowClear: true,
+        data: [{'text':'午餐','id':1},{'text':'晚餐','id':2}]
+    });
+    $("#myModal1").modal('show')
+}
+
+function del_verify() {
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = oTT.fnGetSelectedData();
+    if (aData.length == 1) {
+        $("#myModal2").modal('show')
+    }
+    else {
+        toastr.error('没有选择')
+    }
+}
+
+function del() {
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = oTT.fnGetSelectedData();
+    if (aData.length == 1) {
+        showAjaxLoad()
+        $.post('/order_form_del/', {id: aData[0][7]}, function (d) {
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                $('#datatables').dataTable().fnDraw()
+            } else {
+                toastr.error(d.msg)
+            }
+        })
+    }
+    $('#myModal2').modal('hide')
+}
+
+function star_save(){
+    $('#myModal1').modal('hide')
+    var type = $('#type1').select2('data')
+    if (type == null) {
+        toastr.error('不能为空')
+        return;
+    }
+    type = type["text"]
+    var date = $('#date').val()
+    var star = $('#star').val()
+    var comment = $('#comment').val()
+    showAjaxLoad()
+    $.post('/order_form_star_save/', {type: type,date:date,star:star,comment:comment}, function (d) {
+        hideAjaxLoad()
+        if (d.code == 0) {
+            toastr.success(d.msg)
+            $('#datatables').dataTable().fnDraw()
+        } else {
+            toastr.error(d.msg)
+        }
+    })
+}
+
+</script>
+{% endblock %}

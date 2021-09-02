@@ -1,0 +1,412 @@
+{% extends 'public/index.html' %}
+{% block css %}
+<link href="/static/assets/theme/default/style.min.css" rel="stylesheet"/>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2-metronic.css"/>
+<link rel="stylesheet" href="/static/assets/css/DT_bootstrap.css"/>
+<!-- END PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-select/bootstrap-select.min.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/jquery-multi-select/css/multi-select.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-datepicker/css/datepicker.css" />
+
+{% endblock %}
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="note note-danger">
+{#            <h4 class="block">过期通知：</h4>#}
+            <p>
+                <span style="color:red">{{ expire_info }}</span>
+            </p>
+        </div>
+    {% if request.session.KPI_can_view %}
+        <div class="col-md-4">
+            <div style="width:113px;float:left">
+                <input placeholder="请输入年份" id="year" class="col-md-3 form-control">
+                <a class="btn btn-sm green" id="export_all">
+                    生成Excel文件 <i class="fa fa-level-down"></i>
+                </a>
+            </div>
+            <form action="/KPI_upload_conf/" enctype="multipart/form-data" method="post">
+                <div class="col-md-6" style="float:right;margin-top: 3%">
+                    <a id="KPI_conf_button" class="btn yellow" style="position:relative;width:100px;height:30px;display:inline-block;overflow:hidden;float:left">浏览...
+                        <input type="file" id="KPI_conf" name="KPI_conf" style="position:absolute;z-index:1;left:0;top:0;opacity:0;">
+                    </a>
+                    <button class="btn btn-sm blue" type="submit" id="upload_conf" style="width:100px;height:30px;float:right">
+                        上传文件 <i class="fa fa-share"></i>
+                    </button>
+                    <a id="KPI_conf_show" style="float:left">请选择文件</a>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3">
+            <input placeholder="请输入KPI名" id="ban_KPI_name" class="form-control" style="width:113px;float:left">
+            <input placeholder="请输入日期" id="ban_date" class="form-control" style="width:113px;float:left">
+            <br>
+            <br>
+            <a class="btn btn-sm red" id="ban" style="width:113px;float:left">
+                封禁 <i class="fa fa-times"></i>
+            </a>
+            <a class="btn btn-sm green" id="unban" style="width:113px;float:left">
+                解封 <i class="fa fa-check"></i>
+            </a>
+        </div>
+    {% endif %}
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet box grey tasks-widget">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-globe"></i>全部绩效
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table table-striped table-bordered table-hover table-full-width"  id="datatables">
+                    <thead>
+                    <tr>
+                        <th>被考评人</th>
+                        <th>绩效名称</th>
+                        <th>最终评分</th>
+                        <th>评定等级</th>
+                        <th>状态显示</th>
+                        <th>导出</th>
+                        <th>状态</th>
+                        <th>ID</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        {% if request.session.KPI_can_view %}
+            <div class="form-inline">
+                <div class="form-group">
+                        <div class="input-group">
+                            <span class="twitter-typeahead"
+                                  style="position: relative; display: inline-block;">
+                                <input type="text" class="form-control tt-hint"
+                                       disabled="" autocomplete="off" spellcheck="false"
+                                       style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                <div type="text" id="kpi_list"
+                                     name="typeahead_example_modal_1"
+                                     class="form-control tt-input" autocomplete="off"
+                                     spellcheck="false" dir="auto"
+                                     style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"></div><pre
+                                    aria-hidden="true"
+                                    style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                    class="tt-dropdown-menu"
+                                    style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                    class="tt-dataset-1"></div></span></span>
+                        </div>
+                </div>
+               <a class="btn btn-sm green" onclick="kpi_export_all()">生成绩效总表Excel文件 <i class="fa fa-level-down"></i></a>
+            </div>
+
+        {% endif %}
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+<!--/datatables-->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4><a href="/static/files/KPI_year.xlsx">下载Excel文件</a></h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4><a href="/static/files/KPI/{{ username }}/KPI.xlsx">下载Excel文件</a></h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4><a href="/static/files/KPI/KPI_All/KPI_ALL.xlsx" id = "kpi_all_href">下载Excel文件</a></h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="/static/assets/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/DT_bootstrap.js"></script>
+
+<!--<script src="/static/assets/plugins/context.js"></script>-->
+<!--<script src="/static/assets/plugins/jstree/dist/jstree.min.js"></script>-->
+<script src="/static/assets/plugins/holder.js"></script>
+<script src="/static/assets/plugins/stilearn-base.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
+<script src="/static/assets/plugins/select2/select2.js"></script>
+<script src="/static/assets/plugins/datatables/extras/TableTools.min.js"></script>
+<script src="/static/assets/scripts/custom/table-managed.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js"></script>
+
+
+<script type="text/javascript">
+var oTable;
+var aButtons
+/* Formating function for row details */
+
+$(document).ready(function () {
+    aButtons = []
+    loaddata()
+
+    $('#KPI_conf_button').on('change',function(){
+        $('#KPI_conf_show').html($('#KPI_conf').val())
+    })
+
+    if ('{{ KPI_conf_save }}' == 1){
+        toastr.success('保存成功')
+    }
+    if ('{{ KPI_conf_save }}' == 2){
+        toastr.error('保存失败')
+    }
+    GetKpiNameList()
+});
+
+function loaddata() {
+    oTable = $('#datatables').dataTable({
+        "sAjaxSource": "/KPI_table_all_data/?rand=" + Math.random(),
+        "sDom": "<'row-fluid'<'span6'T><'span6'f>r><'table-scrollable't><'fluid'<'span3'l><'span4'i><'span5'p>>",
+        "bServerSide": true,
+        "bPaginate": true, // 是否使用分页
+        "bProcessing": true, //是否显示正在处理的提示
+        "bLengthChange": true, //是否启用设置每页显示记录数
+        "bFilter": true, //是否使用搜索
+        "bStateSave": true,
+        "bDestroy": true,
+        "bSort": true, //是否使用排序
+        "bAutoWidth": true, //列的宽度会根据table的宽度自适应
+        "sPaginationType": "bootstrap",
+//        "aLengthMenu": [
+//                    [5, 15, 20, -1],
+//                    [5, 15, 20, "All"] // change per page values here
+//                ],
+        "oTableTools": {
+            "sRowSelect": "",
+            'aButtons': aButtons
+        },
+        "aoColumns": [
+            {"mData": "0", "sClass": "center", 'sWidth': "15%"},
+            { "mData": "1", "sClass": "center", 'sWidth': "15%"},
+            {
+                "mData": function (data, type, full) {
+                    var str = data[2];
+                    if (str == '0')
+                        str = ""
+                    return str;
+                },
+                "sClass": "center",'sWidth': "15%"
+            },
+            { "mData": "3", "sClass": "center", 'sWidth': "15%"},
+            { "mData": "4", "sClass": "center", 'sWidth': "15%"},
+            {
+                "mData": function (data, type, full) {
+                    var str = '<a class="btn btn-sm green" onclick=\'export_one(\"' + data[0] + '\",\"'+data[7]+'\")\' >';
+                    str = str + '';
+                    str = str + '生成Excel文件 <i class="fa fa-level-down"></i></a>';
+                    return str;
+                },
+                "sClass": "left",'sWidth': "15%","bSortable": false
+            },
+            { "mData": "6", "sClass": "center", 'sWidth': "5%", 'bVisible': false},
+            { "mData": "7", "sClass": "center", 'sWidth': "5%", 'bVisible': false}
+        ],
+        "aaSorting": [
+            [7, 'desc']
+        ],
+        "oLanguage": {
+            "sProcessing": "正在加载数据...",
+            'sSearch': '数据筛选:',
+            "sLengthMenu": "每页显示 _MENU_ 项记录",
+            "sZeroRecords": "没有符合项件的数据...",
+            "sInfo": "当前数据为从第 _START_ 到第 _END_ 项数据；总共有 _TOTAL_ 项记录",
+            "sInfoEmpty": "显示 0 至 0 共 0 项",
+            "sInfoFiltered": "(_MAX_)",
+            "oPaginate": {
+                "sFirst": '首页',
+                "sPrevious": "上一页",
+                "sNext": "下一页",
+                "sLast": "最后一页"
+            }
+
+        },
+        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            if(aData[6] == 1 || aData[6] == 2 || aData[6] == 3 || aData[6] == 4 || aData[6] == 5 || aData[6] == 6){
+                $('td:eq(4)',nRow).html('<div><img src="/static/assets/img/waiting.png">&nbsp'+aData[4]+'</div>')
+            }else if(aData[4] == '已完成'){
+                $('td:eq(4)',nRow).html('<div><img src="/static/assets/img/running.png">&nbsp'+aData[4]+'</div>')
+            }
+            $('td:eq(1)',nRow).html('<a>'+aData[1]+'</a>')
+            $('td:eq(1)',nRow).on('click',function(){
+                var KPI_name = aData[1]
+                var name = aData[0]
+                var status = aData[6]
+                $.post('/KPI_set_session/', {KPI_name:KPI_name,name:name,status:status}, function (d) {
+                    location.href = '/KPI_table_detail_approve/'
+                })
+            })
+        },
+        "fnServerData": function (sSource, aoData, fnCallback) {
+            aoData.push({csrfmiddlewaretoken: '{{ csrf_token }}'});
+            $.ajax({
+                "dataType": 'json',
+                "type": "POST",
+                "url": sSource,
+                "data": aoData,
+                "success": fnCallback
+            });
+        }
+    })
+}
+function export_one(data_0,data_7) {
+    $.post('/create_excel/', {id: data_7,user_name:data_0}, function (d) {
+        if (d.code == 0) {
+            toastr.success(d.msg)
+            $('#myModal2').modal('show')
+        } else {
+            toastr.error(d.msg)
+        }
+    })
+}
+
+function kpi_export_all(){
+    kpi_name = $('#kpi_list').select2('data')['text']
+    $.post('/create_excel_all/', {kpi_name: kpi_name}, function (d) {
+        if (d.code == 0) {
+            toastr.success(d.msg)
+{#            $('#kpi_all_href').href = "/static/files/KPI/KPI_All/KPI_All.xlsx"#}
+            $('#myModal3').modal('show')
+        } else {
+            toastr.error(d.msg)
+        }
+    })
+}
+
+function GetKpiNameList()
+{
+    $.post('/KPI_table_name_list/', {}, function (d) {
+        if (d.code == 0) {
+            $('#kpi_list').select2({
+                multiple: false,
+                placeholder: '请选择KPI',
+                allowClear: true,
+                data: d.data
+            })
+        }
+    })
+}
+
+$('#export_all').on('click',function(){
+    var year = $('#year').val()
+    if (year != ''){
+        showAjaxLoad()
+        $.post('/KPI_table_export_all/', {year:year}, function (d) {
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                $("#myModal1").modal('show')
+            } else {
+                toastr.error(d.msg)
+            }
+        })
+    }else{
+        toastr.error('年份不能为空')
+    }
+})
+
+$('#ban_date').inputmask("y-m-d", {
+        "placeholder": "yyyy-mm-dd"
+    })
+
+$('#ban').on('click',function(){
+    var ban_KPI_name = $('#ban_KPI_name').val()
+    var ban_date = $('#ban_date').val()
+    $.post('/KPI_ban_save/', {ban_KPI_name:ban_KPI_name,ban_date:ban_date,ban_type:1}, function (d) {
+        if (d.code == 0) {
+            toastr.success(d.msg)
+        } else {
+            toastr.error(d.msg)
+        }
+    })
+})
+
+$('#unban').on('click',function(){
+    var ban_KPI_name = $('#ban_KPI_name').val()
+    var ban_date = $('#ban_date').val()
+    console.info(ban_date)
+    $.post('/KPI_ban_save/', {ban_KPI_name:ban_KPI_name,ban_date:ban_date,ban_type:0}, function (d) {
+        if (d.code == 0) {
+            toastr.success(d.msg)
+        } else {
+            toastr.error(d.msg)
+        }
+    })
+})
+</script>
+{% endblock %}

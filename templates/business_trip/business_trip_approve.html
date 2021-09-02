@@ -1,0 +1,649 @@
+{% extends 'public/index.html' %}
+{% block css %}
+<link href="/static/assets/theme/default/style.min.css" rel="stylesheet"/>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2-metronic.css"/>
+<link rel="stylesheet" href="/static/assets/css/DT_bootstrap.css"/>
+<!-- END PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-select/bootstrap-select.min.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/jquery-multi-select/css/multi-select.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-datepicker/css/datepicker.css" />
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css" />
+
+{% endblock %}
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+{#        <div class="note note-danger">#}
+{#            <h4 class="block">过期通知：</h4>#}
+{#            <p>#}
+{#                <span style="color:red">{{ expire_info }}</span>#}
+{#            </p>#}
+{#        </div>#}
+        <div class="portlet box grey tasks-widget">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-globe"></i>出差审批
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table table-striped table-bordered table-hover table-full-width"  id="datatables">
+                    <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>行程详情</th>
+                        <th>详细预算</th>
+                        <th>起止日期</th>
+                        <th>申请日期</th>
+                        <th>同行人</th>
+                        <th>订酒店</th>
+                        <th>总预算</th>
+                        <th>状态</th>
+                        <th>Excel</th>
+                        <th>审批通过</th>
+                        <th>审批不通过</th>
+                        <th>ID</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">出差申请</h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">事由</label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" id='reason' style="width: 290px" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">目的地</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                                    <input type="text" class="form-control tt-hint"
+                                           disabled="" autocomplete="off" spellcheck="false"
+                                           style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                    <input type="text" id="destination"
+                                           name="typeahead_example_modal_1"
+                                           class="form-control tt-input" autocomplete="off"
+                                           spellcheck="false" dir="auto"
+                                           style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"><pre
+                                        aria-hidden="true"
+                                        style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                        class="tt-dropdown-menu"
+                                        style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                        class="tt-dataset-1"></div></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="reportrange_div" class="form-group">
+                        <label class="col-sm-4 control-label">出差日期</label>
+                        <div class="col-sm-8">
+                            <div class="col-md-2" style="margin-left:-15px; float: left">
+                                <div id="reportrange" class="btn default">
+                                    <i class="fa fa-calendar"></i>
+                                    <span>
+                                    </span>
+                                    <b class="fa fa-angle-down"></b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="days"></div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">同行人</label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                                    <input type="text" class="form-control tt-hint"
+                                           disabled="" autocomplete="off" spellcheck="false"
+                                           style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                    <input type="text" id="travel_partner"
+                                           name="typeahead_example_modal_1"
+                                           class="form-control tt-input" autocomplete="off"
+                                           spellcheck="false" dir="auto"
+                                           style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"><pre
+                                        aria-hidden="true"
+                                        style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                        class="tt-dropdown-menu"
+                                        style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                        class="tt-dataset-1"></div></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">交通工具</label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                                    <input type="text" class="form-control tt-hint"
+                                           disabled="" autocomplete="off" spellcheck="false"
+                                           style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                    <div type="text" id="vehicle"
+                                         name="typeahead_example_modal_1"
+                                         class="form-control tt-input" autocomplete="off"
+                                         spellcheck="false" dir="auto"
+                                         style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"></div><pre
+                                        aria-hidden="true"
+                                        style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                        class="tt-dropdown-menu"
+                                        style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                        class="tt-dataset-1"></div></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">订酒店</label>
+                            <div  class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="twitter-typeahead"
+                                          style="position: relative; display: inline-block;">
+                                        <input id="half_day_disable" type="text" class="form-control tt-hint"
+                                               disabled="" autocomplete="off" spellcheck="false"
+                                               style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                        <div type="text" id="hotel_reservation"
+                                             name="typeahead_example_modal_1"
+                                             class="form-control tt-input" autocomplete="off"
+                                             spellcheck="false" dir="auto"
+                                             style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"></div><pre
+                                            aria-hidden="true"
+                                            style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                            class="tt-dropdown-menu"
+                                            style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                            class="tt-dataset-1"></div></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div id="id" style="display: none"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="rule_save()"><i class="fa fa-check"></i>保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/datatables-->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4><a href="/static/files/business_trip.xlsx">下载Excel文件</a></h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4>您确定要通过审批吗</h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="agree()"><i class="fa fa-check"></i>确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4>您确定不通过审批吗</h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="disagree()"><i class="fa fa-check"></i>确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="/static/assets/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/DT_bootstrap.js"></script>
+
+<!--<script src="/static/assets/plugins/context.js"></script>-->
+<!--<script src="/static/assets/plugins/jstree/dist/jstree.min.js"></script>-->
+<script src="/static/assets/plugins/holder.js"></script>
+<script src="/static/assets/plugins/stilearn-base.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
+<script src="/static/assets/plugins/select2/select2.js"></script>
+<script src="/static/assets/plugins/datatables/extras/TableTools.min.js"></script>
+<script src="/static/assets/scripts/custom/table-managed.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-daterangepicker/daterangepicker.js" ></script>
+
+
+
+<script type="text/javascript">
+var oTable;
+var aButtons
+/* Formating function for row details */
+
+$(document).ready(function () {
+    aButtons = []
+
+
+    $('#reportrange').daterangepicker({
+        opens: (App.isRTL() ? 'left' : 'right'),
+
+    //    startDate: moment().subtract('days', 29),
+    //    endDate: moment(),
+        minDate: moment().subtract(90,'days'),
+        maxDate: moment().add(90,'days'),
+        dateLimit: {
+            days: 2800
+        },
+        showDropdowns: true,
+        showWeekNumbers: false,
+        timePicker: false,
+        timePickerIncrement: 1,
+        timePicker12Hour: false,
+        ranges: {
+           'Today': [moment(), moment()],
+{#           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],#}
+{#           'Last 7 Days': [moment().subtract(6, 'days'), moment()],#}
+{#           'This Month': [moment().startOf('month'), moment().endOf('month')],#}
+{#           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]#}
+        },
+        buttonClasses: ['btn'],
+        applyClass: 'green',
+        cancelClass: 'default',
+        format: 'YYYY/MM/DD',
+        separator: ' to ',
+        locale: {
+            applyLabel: 'Apply',
+            fromLabel: 'From',
+            toLabel: 'To',
+            customRangeLabel: '自定义',
+            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            firstDay: 1
+        }
+        },
+        function (start, end) {
+            $('#reportrange span').html(start.format('YYYY-MM-DD') + '  ->  ' + end.format('YYYY-MM-DD'));
+{#            var begin = start.format('YYYY-MM-DD')#}
+{#            var end = end.format('YYYY-MM-DD')#}
+{#            $('#begin_time').val(begin)#}
+{#            $('#end_time').val(end)#}
+{#            var type = $('#active_tab1').attr('class')#}
+{#            if (type == 'active') {#}
+{#                loaddata(begin, end,'午餐')#}
+{#            }else{#}
+{#                loaddata(begin, end,'晚餐')#}
+{#            }#}
+{#            $('#datatables').dataTable().fnDraw()#}
+        }
+    );
+
+
+    $('#vehicle').select2({
+        multiple: false,
+        placeholder: '选择交通工具',
+        allowClear: true,
+        data: [{'text':'飞机','id':1},
+               {'text':'火车','id':2},
+               {'text':'汽车','id':3}]
+    });
+
+
+    $('#hotel_reservation').select2({
+        multiple: false,
+        placeholder: '选择是否订酒店',
+        allowClear: true,
+        data: [{'text':'是','id':1},
+               {'text':'否','id':0}]
+    });
+
+    loaddata()
+});
+
+function loaddata() {
+    oTable = $('#datatables').dataTable({
+        "sAjaxSource": "/business_trip_approve_data/?rand=" + Math.random(),
+        "sDom": "<'row-fluid'<'span6'T><'span6'f>r><'table-scrollable't><'fluid'<'span3'l><'span4'i><'span5'p>>",
+        "bServerSide": true,
+        "bPaginate": true, // 是否使用分页
+        "bProcessing": true, //是否显示正在处理的提示
+        "bLengthChange": true, //是否启用设置每页显示记录数
+        "bFilter": true, //是否使用搜索
+        "bStateSave": true,
+        "bDestroy": true,
+        "bSort": true, //是否使用排序
+        "bAutoWidth": true, //列的宽度会根据table的宽度自适应
+        "sPaginationType": "bootstrap",
+//        "aLengthMenu": [
+//                    [5, 15, 20, -1],
+//                    [5, 15, 20, "All"] // change per page values here
+//                ],
+        "oTableTools": {
+            "sRowSelect": "",
+            'aButtons': aButtons
+        },
+        "aoColumns": [
+            { "sClass": "center", 'sWidth': "5%", 'bSortable': false},
+            { "sClass": "center", 'sWidth': "5%", 'bSortable': false},
+            { "sClass": "center", 'sWidth': "5%", 'bSortable': false},
+            { "sClass": "center", 'sWidth': "5%", 'bSortable': false},
+            { "sClass": "center", 'sWidth': "5%", 'bSortable': false},
+            { "sClass": "center", 'sWidth': "5%", 'bSortable': false},
+            { "sClass": "center", 'sWidth': "5%", 'bSortable': false},
+            { "sClass": "center", 'sWidth': "5%", 'bSortable': false},
+            { "sClass": "center", 'sWidth': "5%"},
+            { "sClass": "center", 'sWidth': "5%", 'bSortable': false},
+            { "sClass": "center", 'sWidth': "5%", 'bSortable': false},
+            { "sClass": "center", 'sWidth': "5%", 'bSortable': false},
+            { "sClass": "center", 'sWidth': "5%", 'bVisible': false}
+        ],
+        "aaSorting": [
+            [12, 'desc']
+        ],
+        "oLanguage": {
+            "sProcessing": "正在加载数据...",
+            'sSearch': '数据筛选:',
+            "sLengthMenu": "每页显示 _MENU_ 项记录",
+            "sZeroRecords": "没有符合项件的数据...",
+            "sInfo": "当前数据为从第 _START_ 到第 _END_ 项数据；总共有 _TOTAL_ 项记录",
+            "sInfoEmpty": "显示 0 至 0 共 0 项",
+            "sInfoFiltered": "(_MAX_)",
+            "oPaginate": {
+                "sFirst": '首页',
+                "sPrevious": "上一页",
+                "sNext": "下一页",
+                "sLast": "最后一页"
+            }
+
+        },
+        "fnInitComplete": function (oSettings, json) {
+            $('input[type=checkbox],input[type=radio],input[type=file]').uniform()
+        },
+        "fnDrawCallback": function (oSettings) {
+            $('input[type=checkbox],input[type=radio],input[type=file]').uniform()
+        },
+        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            if(aData[8] == 0){
+                $('td:eq(8)',nRow).html('<div><img src="/static/assets/img/waiting.png">&nbsp等待提交</div>')
+            }else if(aData[8] == 1 || aData[8] == 2 || aData[8] == 3){
+                $('td:eq(8)',nRow).html('<div><img src="/static/assets/img/waiting.png">&nbsp等待&nbsp'+aData[13]+'&nbsp审批</div>')
+            }else if(aData[8] == 4){
+                $('td:eq(8)',nRow).html('<div><img src="/static/assets/img/waiting.png">&nbsp待出差</div>')
+            }else if(aData[8] == 5){
+                $('td:eq(8)',nRow).html('<div><img src="/static/assets/img/running.png">&nbsp行程完成</div>')
+            }else if(aData[8] == 6){
+                $('td:eq(8)',nRow).html('<div><img src="/static/assets/img/stoping.png">&nbsp行程取消</div>')
+            }else if(aData[8] == 7){
+                $('td:eq(8)',nRow).html('<div><img src="/static/assets/img/stoping.png">&nbsp审核不通过</div>')
+            }else if(aData[8] == 8){
+                $('td:eq(8)',nRow).html('<div><img src="/static/assets/img/stoping.png">&nbsp已过期</div>')
+            }
+            if (aData[13] != '{{ user }}'){
+                $('td:eq(10)',nRow).html('');
+                $('td:eq(11)',nRow).html('');
+            }
+            $('td:eq(1)',nRow).on('click',function(){
+                var parent_id = aData[12]
+                var status = aData[8]
+                $.post('/business_trip_set_session/', {parent_id: parent_id, status: status}, function (d) {
+                    location.href = '/business_trip_detail/'
+                });
+            });
+            $('td:eq(2)',nRow).on('click',function(){
+                var parent_id = aData[12]
+                var status = aData[8]
+                $.post('/business_trip_set_session/', {parent_id: parent_id, status: status}, function (d) {
+                    location.href = '/business_trip_budget/'
+                });
+            })
+            $('td:eq(9)',nRow).on('click',function(){
+                $.post('/business_trip_create_excel/', {id:aData[12]}, function (d) {
+                    if (d.code == 0) {
+                        toastr.success(d.msg)
+                        $('#myModal2').modal('show')
+                    } else {
+                        toastr.error(d.msg)
+                    }
+                })
+            })
+            $('td:eq(10)',nRow).on('click',function(){
+                var parent_id = aData[12]
+                $.cookie('flag',parent_id,{ expires: 1 })
+                var status = aData[8]
+                $.cookie('status',status,{ expires: 1 })
+                $("#myModal3").modal('show')
+            })
+            $('td:eq(11)',nRow).on('click',function(){
+                var parent_id = aData[12]
+                $.cookie('flag',parent_id,{ expires: 1 })
+                var status = aData[8]
+                $.cookie('status',status,{ expires: 1 })
+                $("#myModal4").modal('show')
+            })
+        },
+        "fnServerData": function (sSource, aoData, fnCallback) {
+            aoData.push({csrfmiddlewaretoken: '{{ csrf_token }}'})
+            $.ajax({
+                "dataType": 'json',
+                "type": "POST",
+                "url": sSource,
+                "data": aoData,
+                "success": fnCallback
+            });
+        }
+    });
+}
+
+function add() {
+    $('#reason').val("")
+    $('#destination').val("")
+    $('#reportrange span').html(moment().format('YYYY-MM-DD') + '  ->  ' + moment().format('YYYY-MM-DD'))
+    $('#travel_partner').val("")
+    $('#vehicle').select2("data", "")
+    $('#hotel_reservation').select2("data", "")
+    $("#myModal").modal('show')
+}
+
+
+
+function edit() {
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = oTT.fnGetSelectedData();
+    var reason = aData[0][1];
+    var destination = aData[0][2];
+    var date = aData[0][4];
+    var travel_partner = aData[0][5];
+    var vehicle = aData[0][6];
+    var hotel_reservation = aData[0][7];
+    var id = aData[0][13];
+    $('#reason').val(reason);
+    $('#destination').val(destination);
+    $('#reportrange span').html(date)
+    $('#travel_partner').val(travel_partner);
+    $('#vehicle').select2("data",{'text':vehicle});
+    $('#hotel_reservation').select2("data",{'text':hotel_reservation});
+    $('#id').val(id);
+    $("#myModal").modal('show')
+}
+
+
+
+function agree() {
+    var id = $.cookie('flag')
+    var status = $.cookie('status')
+    $.post('/business_trip_approve_process/', {id:id, status:status, flag:1}, function (d) {
+        if (d.code == 0) {
+            toastr.success(d.msg)
+            $('#datatables').dataTable().fnDraw(false)
+        } else {
+            toastr.error(d.msg)
+        }
+    })
+    $('#myModal3').modal('hide')
+}
+
+
+
+function disagree() {
+    var id = $.cookie('flag')
+    var status = $.cookie('status')
+    $.post('/business_trip_approve_process/', {id:id, status:status, flag:0}, function (d) {
+        if (d.code == 0) {
+            toastr.success(d.msg)
+            $('#datatables').dataTable().fnDraw(false)
+        } else {
+            toastr.error(d.msg)
+        }
+    })
+    $('#myModal4').modal('hide')
+}
+
+
+
+function rule_save() {
+    var reason = $('#reason').val();
+    var destination = $('#destination').val();
+    var date = $('#reportrange span').html().split('  -&gt;  ');
+    var begin = date[0]
+    var end = date[1]
+    var travel_partner = $('#travel_partner').val();
+    var vehicle = $('#vehicle').select2('data');
+    var hotel_reservation = $('#hotel_reservation').select2('data');
+
+
+{#        var name = $('#name').select2('data');#}
+{#        var name_list = []#}
+{#        for (var i in name) {#}
+{#            name_list.push(name[i]["text"]);#}
+{#        }#}
+{#        var department = $('#department').val();#}
+{#        var supervisor = $('#supervisor').select2('data');#}
+{#        var supervisor_list = []#}
+{#        for (var i in supervisor) {#}
+{#            supervisor_list.push(supervisor[i]["text"]);#}
+{#        }#}
+{#        var principal = $('#principal').select2('data');#}
+{#        var principal_list = []#}
+{#        for (var i in principal) {#}
+{#            principal_list.push(principal[i]["text"]);#}
+{#        }#}
+{#        var join_date = $('#join_date').val();#}
+{#        var graduate_year = $('#graduate_year').val();#}
+{#        var positive_date = $('#positive_date').val()#}
+{#        var email = $('#email').val();#}
+    var id = $('#id').val();
+
+    if (reason == '' || destination == '' || begin == '' || vehicle == null || hotel_reservation == null) {
+        toastr.error('不能有空白');
+        return;
+    }
+{#        console.info(name_list[0],department,supervisor_list[0],principal_list[0],join_date,graduate_year)#}
+
+    showAjaxLoad();
+    $(self).button('loading');//正在登陆中，显示data-loading-text 标记内容
+
+
+    $.ajax({
+        url: '/business_trip_table_save/',
+        type: "POST",
+        data: {
+            reason: reason,
+            destination: destination,
+            begin: begin,
+            end: end,
+            travel_partner: travel_partner,
+            vehicle: vehicle['text'],
+            hotel_reservation: hotel_reservation['id'],
+            id: id
+        },
+        success: function (d) {
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                $('#datatables').dataTable().fnDraw()
+            } else {
+                toastr.error(d.msg)
+            }
+        }
+    });
+    $('#myModal').modal('hide')
+    $(self).button('complete')
+}
+
+</script>
+{% endblock %}

@@ -1,0 +1,898 @@
+{% extends 'public/index.html' %}
+{% block css %}
+<link href="/static/assets/theme/default/style.min.css" rel="stylesheet"/>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2-metronic.css"/>
+<link rel="stylesheet" href="/static/assets/css/DT_bootstrap.css"/>
+<!-- END PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-select/bootstrap-select.min.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/jquery-multi-select/css/multi-select.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-datepicker/css/datepicker.css" />
+<link href="/static/assets/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.css" rel="stylesheet"/>
+
+{% endblock %}
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <a id="back" class="btn btn-sm yellow">
+             返回 <i class="fa fa-reply"></i>
+        </a>
+        <div class="col-md-12"></div>
+        <div class="portlet box grey tasks-widget">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-globe"></i><span id = 'navigation_text'></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table table-striped table-bordered table-hover table-full-width"  id="datatables">
+                    <thead>
+                    <tr>
+                        <th>评估内容</th>
+                        <th>评估标准</th>
+                        <th>权重</th>
+                        <th>打分(自评)</th>
+                        <th>分数(自评)</th>
+                        <th>打分(上级主管)</th>
+                        <th>分数(上级主管)</th>
+                        <th>打分(中心负责人)</th>
+                        <th>分数(中心负责人)</th>
+                        <th>操作</th>
+
+{#                        <th>被考评人</th>#}
+{#                        <th>ID</th>#}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% if request.session.status != 1 and request.session.status != 2 %}
+<div class="col-md-4" id="div_cose">
+    <div class="portlet box grey">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-globe"></i>评分统计
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <div class="form-horizontal form-bordered"  enctype="multipart/form-data" method="post">
+                <div class="form-body">
+                    <div class="form-group" id = "div_cose_self">
+                        <label class="control-label col-md-6" style = "padding-right: 20px">总分(自评)&nbsp&nbsp{{ name }}</label>
+                        <div class="col-md-6" style="padding-left: 20px;padding-right: 30px">
+                            <input type="text" id="self_total_score" class="form-control" disabled="true">
+                        </div>
+                    </div>
+                    <div class="form-group" id = "div_cose_supervisor">
+                        <label class="control-label col-md-6" style = "padding-right: 20px">总分(上级主管)&nbsp&nbsp{{ supervisor }}</label>
+                        <div class="col-md-6" style="padding-left: 20px;padding-right: 30px">
+                            <input type="text" id="supervisor_total_score" class="form-control" disabled="true">
+                        </div>
+                    </div>
+                    <div class="form-group" id = "div_cose_principal">
+                        <label class="control-label col-md-6" style = "padding-right: 20px">总分(中心负责人)&nbsp&nbsp{{ principal }}</label>
+                        <div class="col-md-6" style="padding-left: 20px;padding-right: 30px">
+                            <input type="text" id="principal_total_score" class="form-control" disabled="true">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12" id="div_self">
+    <!-- BEGIN PORTLET-->
+    <div class="portlet box grey">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-globe"></i>自我评价
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="form-body">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <textarea id="self_comment" placeholder="在此输入评价内容(请勿少于10个字)" rows="{{ self_comment_row }}" maxlength="" class="form-control" style="height: 120px;" ></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+            </div>
+        </div>
+    </div>
+    <!-- END PORTLET-->
+</div>
+<div class="col-md-12" id="div_supervisor">
+    <!-- BEGIN PORTLET-->
+    <div class="portlet box grey">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-globe"></i>直属主管评价
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="form-body">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <textarea id="supervisor_comment" placeholder="在此输入评价内容(请勿少于10个字)" rows="{{ supervisor_comment_row }}" maxlength="" class="form-control" style="height: 120px;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+            </div>
+        </div>
+    </div>
+    <!-- END PORTLET-->
+</div>
+<div class="col-md-12" id="div_principal">
+    <!-- BEGIN PORTLET-->
+    <div class="portlet box grey">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-globe"></i>中心负责人评价
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="form-body">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <textarea id="principal_comment" placeholder="在此输入评价内容(请勿少于10个字)" rows="{{ principal_comment_row }}" maxlength="" class="form-control" style="height: 120px;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+            </div>
+        </div>
+    </div>
+    <!-- END PORTLET-->
+</div>
+{% endif %}
+</div>
+{% ifequal commit_now user %}
+    <div class="text-center">
+    {% if request.session.status == 2 or request.session.status == 4 or request.session.status == 5 %}
+        <a id="commit" class="btn btn-sm purple">
+        {% if request.session.status == 2 %}
+            通过
+        {% else %}
+            提交
+        {% endif %}
+            <i class="fa fa-check"></i>
+        </a>
+    {% endif %}
+    {% if request.session.status == 2 %}
+        <a id="refuse" class="btn btn-sm red">
+            不通过 <i class="fa fa-times"></i>
+        </a>
+    {% endif %}
+    </div>
+{% endifequal %}
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title" id = "h4_show_text">设定目标</h4>
+            </div>
+            <div class="modal-body form">
+                <form id="form" action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">评估内容</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                                    <input type="text" class="form-control tt-hint"
+                                           disabled="" autocomplete="off" spellcheck="false"
+                                           style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                    <input type="text" id="objective"
+                                           name="typeahead_example_modal_1"
+                                           class="form-control tt-input" autocomplete="off"
+                                           spellcheck="false" dir="auto"
+                                           style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"><pre
+                                        aria-hidden="true"
+                                        style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                        class="tt-dropdown-menu"
+                                        style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                        class="tt-dataset-1"></div></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">评估标准</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                                    <input type="text" class="form-control tt-hint"
+                                           disabled="" autocomplete="off" spellcheck="false"
+                                           style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                    <input type="text" id="description"
+                                           name="typeahead_example_modal_1"
+                                           class="form-control tt-input" autocomplete="off"
+                                           spellcheck="false" dir="auto"
+                                           style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"><pre
+                                        aria-hidden="true"
+                                        style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                        class="tt-dropdown-menu"
+                                        style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                        class="tt-dataset-1"></div></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">权重</label>
+                        <div class="col-md-6">
+                            <div class="slider bg-green ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="slider-snap-inc" aria-disabled="false">
+                            <a href="#" class="ui-slider-handle ui-state-default ui-corner-all" style="left: 80%;"></a></div>
+                            <div class="slider-value form-control-static">
+                                <span id="slider-snap-inc-amount">50%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="from_grade" class="form-group">
+                        <label class="control-label col-md-4">打分(1-100)
+                        <span class="required">
+                        </span>
+                        </label>
+                        <div class="col-md-6">
+                            <input id="grade" type="text" class="form-control" name="digits">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="id" style="display: none"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="save" type="button" class="btn btn-primary"><i class="fa fa-check"></i>保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4 id="score_html">您确定要提交吗</h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button id="commit_button" type="button" class="btn btn-primary"><i class="fa fa-check"></i>确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4>请填写不通过的理由</h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">理由</label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" id='reason' style="width: 290px" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button id="refuse_button" type="button" class="btn btn-primary"><i class="fa fa-check"></i>确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{#<span class="input-group-addon bootstrap-touchspin-postfix">%</span>#}
+
+{#<div class="col-md-4">#}
+{#    <input type="text" class="form-control" name="digits"><span for="digits" class="help-block">Please enter only digits.</span>#}
+{#</div>#}
+
+<!--/datatables-->
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="/static/assets/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/DT_bootstrap.js"></script>
+
+<!--<script src="/static/assets/plugins/context.js"></script>-->
+<!--<script src="/static/assets/plugins/jstree/dist/jstree.min.js"></script>-->
+<script src="/static/assets/plugins/holder.js"></script>
+<script src="/static/assets/plugins/stilearn-base.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
+<script src="/static/assets/plugins/select2/select2.js"></script>
+<script src="/static/assets/plugins/datatables/extras/TableTools.min.js"></script>
+<script src="/static/assets/scripts/custom/table-managed.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/jquery-validation/dist/jquery.validate.min.js"></script>
+
+<script type="text/javascript">
+var oTable;
+var aButtons
+/* Formating function for row details */
+
+$(document).ready(function () {
+    $('#form').validate({
+        errorElement: 'span', //default input error message container
+        errorClass: 'help-block', // default input error message class
+        focusInvalid: false, // do not focus the last invalid input
+        ignore: "",
+        rules: {
+            digits: {
+                digits: true,
+                range: [0,100]
+            }
+        },
+        messages: {
+            digits: "请输入范围在0-100的数字"
+        },
+
+        invalidHandler: function (event, validator) { //display error alert on form submit
+            success1.hide();
+            error1.show();
+            App.scrollTo(error1, -200);
+        },
+
+        highlight: function (element) { // hightlight error inputs
+            $(element)
+                .closest('.form-group').addClass('has-error'); // set error class to the control group
+        },
+
+        unhighlight: function (element) { // revert the change done by hightlight
+            $(element)
+                .closest('.form-group').removeClass('has-error'); // set error class to the control group
+        },
+
+        success: function (label) {
+            label
+                .closest('.form-group').removeClass('has-error'); // set success class to the control group
+        },
+
+        submitHandler: function (form) {
+            success1.show();
+            error1.hide();
+        }
+    });
+
+    var KPI_name = '{{ KPI_name }}'
+    var name = '{{ name }}'
+
+{% if request.session.status == 1 or request.session.status == 2 %}
+    var flag = 0
+{% elif request.session.status == 3 or request.session.status == 4 or request.session.status == 5 %}
+    var flag = 1
+{% endif %}
+
+    $('#self_comment').attr('disabled',true)
+
+{% if request.session.status != 4 %}
+    $('#supervisor_comment').attr('disabled',true)
+{% endif %}
+{% if request.session.status != 5 %}
+    $('#principal_comment').attr('disabled',true)
+{% endif %}
+
+    $('#self_comment').val('{{ self_comment }}')
+    $('#supervisor_comment').val('{{ supervisor_comment }}')
+    $('#principal_comment').val('{{ principal_comment }}')
+
+    $('#back').on('click',function(){
+        history.go(-1)
+    })
+
+    $('#commit').on('click',function(){
+        var oTT = TableTools.fnGetInstance('datatables');
+        oTT.fnSelectAll()
+        var aData = oTT.fnGetSelectedData();
+        for (var i in aData) {
+        {% if request.session.status == 4 %}
+            if (aData[i][5] == '0') {
+                oTT.fnSelectNone()
+                toastr.error('请完成上级主管评分')
+                return
+            }
+        {% endif %}
+        {% if request.session.status == 5 %}
+            if (aData[i][7] == '0') {
+                oTT.fnSelectNone()
+                toastr.error('请完成中心负责人评分')
+                return
+            }
+        {% endif %}
+        }
+        oTT.fnSelectNone()
+        $("#myModal2").modal('show')
+    })
+
+    $('#commit_button').on('click',function(){
+        var oTT = TableTools.fnGetInstance('datatables');
+        oTT.fnSelectAll()
+        var aData = oTT.fnGetSelectedData();
+        var sum = 0;
+        var sum1 = 0;
+        var sum2 = 0;
+        var sum3 = 0;
+        for (var i in aData){
+            sum1 += aData[i][4]
+        }
+        for (var i in aData) {
+            if (aData[i][6] == 0) {
+                sum2 += aData[i][8]
+            }else{
+                sum2 += aData[i][6]
+            }
+        }
+        for (var i in aData){
+            sum3 += aData[i][8]
+        }
+{#        sum = sum1 * 0.2 + sum2 * 0.3 + sum3 *0.5#}
+        sum = sum2 * 0.6 + sum3 *0.4
+        sum = Math.round(sum)
+        oTT.fnSelectNone();
+
+    {% if request.session.status == 4 %}
+        var supervisor_comment = $('#supervisor_comment').val()
+        if (supervisor_comment == ''){
+            toastr.error('请填写评价')
+            return
+        }
+        if (supervisor_comment.length < 10) {
+            toastr.error('请填写评价勿少于10个字')
+            return
+        }
+        $.post('/KPI_table_detail_comment_save/', {supervisor_comment:supervisor_comment,KPI_name:KPI_name,name:name}, function (d) {
+            showAjaxLoad()
+            $.post('/KPI_table_detail_approve_commit/', {KPI_name:KPI_name,name:name,flag:flag,commit:1,sum:sum}, function (d) {
+                $("#myModal2").modal('hide')
+                hideAjaxLoad()
+                if (d.code == 0) {
+                    toastr.success(d.msg)
+                    setTimeout('location.href = "/KPI_table_approve/"',500)
+                } else {
+                    toastr.error(d.msg)
+                }
+            })
+        })
+    {% elif request.session.status == 5 %}
+        var principal_comment = $('#principal_comment').val()
+        if (principal_comment == ''){
+            toastr.error('请填写评价')
+            return
+        }
+        if (principal_comment.length < 10) {
+            toastr.error('请填写评价勿少于10个字')
+            return
+        }
+        $.post('/KPI_table_detail_comment_save/', {principal_comment:principal_comment,KPI_name:KPI_name,name:name}, function (d) {
+            showAjaxLoad()
+            $.post('/KPI_table_detail_approve_commit/', {KPI_name:KPI_name,name:name,flag:flag,commit:1,sum:sum}, function (d) {
+                $("#myModal2").modal('hide')
+                hideAjaxLoad()
+                if (d.code == 0) {
+                    toastr.success(d.msg)
+                    setTimeout('location.href = "/KPI_table_approve/"',500)
+                } else {
+                    toastr.error(d.msg)
+                }
+            })
+        })
+    {% else %}
+        showAjaxLoad()
+        $.post('/KPI_table_detail_approve_commit/', {KPI_name:KPI_name,name:name,flag:flag,commit:1,sum:sum}, function (d) {
+            $("#myModal2").modal('hide')
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                setTimeout('location.href = "/KPI_table_approve/"',500)
+            } else {
+                toastr.error(d.msg)
+            }
+        })
+    {% endif %}
+    })
+
+    $('#refuse').on('click',function(){
+        $("#myModal3").modal('show')
+    })
+
+    $('#refuse_button').on('click',function(){
+        var reason = $('#reason').val()
+        if (reason == ''){
+            toastr.error('请填写理由')
+            return
+        }
+        showAjaxLoad()
+        $.post('/KPI_table_detail_approve_commit/', {KPI_name:KPI_name,name:name,flag:flag,commit:0,reason:reason}, function (d) {
+            $("#myModal2").modal('hide')
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                setTimeout('location.href = "/KPI_table_approve/"',500)
+            } else {
+                toastr.error(d.msg)
+            }
+        })
+    })
+
+    aButtons = [
+{#    {% ifequal commit_now user %}#}
+{#        {% if request.session.status == 4 or  request.session.status == 5 %}#}
+{#            {#}
+{#                "sExtends": 'text',#}
+{#                "sButtonText": '<font color="white">评分</font><i class="fa fa-pencil"></i>',#}
+{#                "sButtonClass": "btn purple ",#}
+{#                "fnComplete": function (nButton, oConfig, nRow) {#}
+{#                    grade_()#}
+{#                }#}
+{#            },#}
+{#        {% endif %}#}
+{#    {% endifequal %}#}
+        ]
+    loaddata()
+    HidAllElement()
+
+});
+
+//隐藏/显示
+function HidAllElement() {
+    var this_oTable = $("#datatables").dataTable()
+    var navigation_text = '绩效考评详情'
+    var hidcolum_list = []
+    var hiddiv_list = []
+    {% if request.session.status == 2 %}
+        navigation_text = '目标确认'
+        hidcolum_list.push(3,4,5,6,7,8)
+    {% elif request.session.status == 4 %}
+        navigation_text = '直属主管评分'
+        hidcolum_list.push(7,8)
+        hiddiv_list.push('div_principal','div_cose_principal')
+    {% elif request.session.status == 5 %}
+        navigation_text = '中心负责人评分'
+    {% endif %}
+
+    {% ifnotequal commit_now user %}
+        hidcolum_list.push(9)
+    {% endifnotequal %}
+    {% if request.session.status != 4 and request.session.status != 5 %}
+        hidcolum_list.push(9)
+    {% endif %}
+
+    $("#h4_show_text").html(navigation_text)
+    $("#navigation_text").html(navigation_text)
+
+    $.each([0,1,2,3,4,5,6,7,8,9], function(index,value) {
+        this_oTable.fnSetColumnVis(value, true);
+    });
+
+    $.each(hidcolum_list, function(index,value) {
+        this_oTable.fnSetColumnVis(value, false);
+    });
+    $.each(hiddiv_list, function(index,value) {
+        $('#'+ value).attr("style","display:none;");//隐藏div
+    });
+ };
+
+function loaddata() {
+    oTable = $('#datatables').dataTable({
+        "sAjaxSource": "/KPI_table_detail_data/?rand=" + Math.random(),
+        "sDom": "<'row-fluid'<'span6'T><'span6'f>r><'table-scrollable't><'fluid'<'span3'l><'span4'i><'span5'p>>",
+        "bServerSide": true,
+        "bPaginate": true, // 是否使用分页
+        "bProcessing": true, //是否显示正在处理的提示
+        "bLengthChange": true, //是否启用设置每页显示记录数
+        "bFilter": true, //是否使用搜索
+        "bStateSave": true,
+        "bDestroy": true,
+        "bSort": true, //是否使用排序
+        "bAutoWidth": true, //列的宽度会根据table的宽度自适应
+        "sPaginationType": "bootstrap",
+//        "aLengthMenu": [
+//                    [5, 15, 20, -1],
+//                    [5, 15, 20, "All"] // change per page values here
+//                ],
+        "oTableTools": {
+            "sRowSelect": "single",
+            'aButtons': aButtons
+        },
+        "aoColumns": [
+            { "mData": "0","sClass": "center", 'sWidth': "10%"},
+            { "mData": "1","sClass": "center", 'sWidth': "10%"},
+            { "mData": "2","sClass": "center", 'sWidth': "10%"},
+            { "mData": "3","sClass": "center", 'sWidth': "10%"},
+            { "mData": "4","sClass": "center", 'sWidth': "10%"},
+            { "mData": "5","sClass": "center", 'sWidth': "10%"},
+            { "mData": "6","sClass": "center", 'sWidth': "10%"},
+            { "mData": "7","sClass": "center", 'sWidth': "10%"},
+            { "mData": "8","sClass": "center", 'sWidth': "10%"},
+            {
+                "mData": function (data, type, full) {
+                    var str = "-无-";
+                    {% ifequal commit_now user %}
+                        {% if request.session.status == 4 or  request.session.status == 5 %}
+                            str = '<button class="btn btn-sm purple" onclick=\'grade_new(' + JSON.stringify(data) + ')\'>评分<i class="fa fa-pencil"></i></button>';
+                        {% endif %}
+                    {% endifequal %}
+                    return str;
+                },
+                "sClass": "left",'bVisible': true
+            },
+{#            { "mData": "9","sClass": "center", 'sWidth': "5%", 'bVisible': false},#}
+{#            { "mData": "10","sClass": "center", 'sWidth': "5%", 'bVisible': false},#}
+{#            { "mData": "11","sClass": "center", 'sWidth': "5%", 'bVisible': false}#}
+        ],
+        "aaSorting": [
+            [11, 'asc']
+        ],
+        "oLanguage": {
+            "sProcessing": "正在加载数据...",
+            'sSearch': '数据筛选:',
+            "sLengthMenu": "每页显示 _MENU_ 项记录",
+            "sZeroRecords": "没有符合项件的数据...",
+            "sInfo": "当前数据为从第 _START_ 到第 _END_ 项数据；总共有 _TOTAL_ 项记录",
+            "sInfoEmpty": "显示 0 至 0 共 0 项",
+            "sInfoFiltered": "(_MAX_)",
+            "oPaginate": {
+                "sFirst": '首页',
+                "sPrevious": "上一页",
+                "sNext": "下一页",
+                "sLast": "最后一页"
+            }
+
+        },
+        "fnInitComplete": function (oSettings, json) {
+            $('input[type=checkbox],input[type=radio],input[type=file]').uniform()
+            total_score()
+        },
+        "fnDrawCallback": function (oSettings) {
+            $('input[type=checkbox],input[type=radio],input[type=file]').uniform()
+            total_score()
+        },
+        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            $('td:eq(2)',nRow).html(aData[2]+'%')
+        },
+        "fnServerData": function (sSource, aoData, fnCallback) {
+            aoData.push({csrfmiddlewaretoken: '{{ csrf_token }}'})
+            $.ajax({
+                "dataType": 'json',
+                "type": "POST",
+                "url": sSource,
+                "data": aoData,
+                "success": fnCallback
+            });
+        }
+    });
+}
+
+function total_score(){
+    var oTT = TableTools.fnGetInstance('datatables');
+    oTT.fnSelectAll()
+    var aData = oTT.fnGetSelectedData();
+    oTT.fnSelectNone()
+    var self_total_score = 0
+    var supervisor_total_score = 0
+    var principal_total_score = 0
+    for (var i in aData){
+        self_total_score += aData[i][4]
+        supervisor_total_score += aData[i][6]
+        principal_total_score += aData[i][8]
+    }
+    $('#self_total_score').val(round(self_total_score,2))
+    $('#supervisor_total_score').val(round(supervisor_total_score,2))
+    $('#principal_total_score').val(round(principal_total_score,2))
+    {% if request.session.status == 4 %}
+        $('#score_html').html('您确定要提交吗<br><h5>您打的总分为：<span style="color:green">' + round(supervisor_total_score,2)+'</span></h5>')
+    {% endif %}
+    {% if request.session.status == 5 %}
+        $('#score_html').html('您确定要提交吗<br><h5>您打的总分为：<span style="color:green">' + round(principal_total_score,2)+'</span></h5>')
+    {% endif %}
+}
+
+function round(v,e){
+    var t=1;
+    for(;e>0;t*=10,e--);
+    for(;e<0;t/=10,e++);
+    return Math.round(v*t)/t;
+}
+
+function isNumber(value) {         //验证是否为数字
+    var patrn = /^(([1-9][0-9]?)|0)((\.[0-9][1-9])|(\.[1-9]))?$/;
+    if (patrn.test(value)|| value == 100) {
+        return true
+    } else {
+        return false
+    }
+}
+
+
+$('#save').on('click',function() {
+    if ($('#from_grade').hasClass('has-error')){
+        toastr.error('请填写数字');
+        return
+    }
+
+    obj = $('#grade').val()
+    {% if request.session.status > 3 %}
+    if (isNumber(obj) == false) {
+        toastr.error('填写正确的评分（0-100 可精确至小数点后两位');
+        return
+    }
+    {% endif %}
+
+
+    var objective = $('#objective').val();
+    var description = $('#description').val();
+    var weight = $('#slider-snap-inc').slider("option","value");
+    var grade = $('#grade').val()
+    var id = $('#id').val();
+    if (objective == '' || description == '' || weight == '') {
+        toastr.error('不能有空白');
+        return;
+    }
+    showAjaxLoad();
+    $(self).button('loading');//正在登陆中，显示data-loading-text 标记内容
+
+    $.ajax({
+        url: '/KPI_table_detail_save/',
+        type: "POST",
+        data: {
+            objective: objective,
+            description: description,
+            weight: weight,
+            grade: grade,
+            status: {{ request.session.status }},
+            id:id
+        },
+        success: function (d) {
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                $('#datatables').dataTable().fnDraw()
+            } else {
+                toastr.error(d.msg)
+            }
+        }
+    });
+    $('#myModal').modal('hide')
+    $(self).button('complete')
+})
+
+function del() {
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = oTT.fnGetSelectedData();
+    if (aData.length == 1) {
+        showAjaxLoad()
+        $.post('/KPI_table_detail_del/', {id: aData[0][11]}, function (d) {
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                $('#datatables').dataTable().fnDraw()
+            } else {
+                toastr.error(d.msg)
+            }
+        })
+    }
+    $('#myModal').modal('hide')
+}
+
+function grade_(){
+    $('#objective').attr('disabled',true)
+    $('#description').attr('disabled',true)
+    $('#slider-snap-inc').hide()
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = oTT.fnGetSelectedData();
+    if (aData.length == 1) {
+        var objective = aData[0][0];
+        var description = aData[0][1];
+        var weight = aData[0][2];
+    {% if request.session.status == 3 %}
+        var grade = aData[0][3];
+    {% endif %}
+    {% if request.session.status == 4 %}
+        var grade = aData[0][5];
+    {% endif %}
+    {% if request.session.status == 5 %}
+        var grade = aData[0][7];
+    {% endif %}
+        var id = aData[0][11];
+        $('#objective').val(objective)
+        $('#description').val(description)
+        $("#slider-snap-inc").slider({
+            isRTL: App.isRTL(),
+            value: weight,
+            min: 0,
+            max: 100,
+            step: 5,
+            slide: function (event, ui) {
+                $("#slider-snap-inc-amount").text(ui.value + "%");
+            }
+        });
+        $("#slider-snap-inc-amount").text(weight + "%");
+        $('#grade').val(grade)
+        $('#id').val(id)
+        $("#myModal").modal('show')
+    }
+}
+
+function grade_new(_data){
+    $('#objective').attr('disabled',true)
+    $('#description').attr('disabled',true)
+    $('#slider-snap-inc').hide()
+    var aData = _data
+    if (aData != undefined) {
+        var objective = aData[0];
+        var description = aData[1];
+        var weight = aData[2];
+    {% if request.session.status == 3 %}
+        var grade = aData[3];
+    {% endif %}
+    {% if request.session.status == 4 %}
+        var grade = aData[5];
+    {% endif %}
+    {% if request.session.status == 5 %}
+        var grade = aData[7];
+    {% endif %}
+        var id = aData[11];
+        $('#objective').val(objective)
+        $('#description').val(description)
+        $("#slider-snap-inc").slider({
+            isRTL: App.isRTL(),
+            value: weight,
+            min: 0,
+            max: 100,
+            step: 5,
+            slide: function (event, ui) {
+                $("#slider-snap-inc-amount").text(ui.value + "%");
+            }
+        });
+        $("#slider-snap-inc-amount").text(weight + "%");
+        $('#grade').val(grade)
+        $('#id').val(id)
+        $("#myModal").modal('show')
+    }
+}
+
+function myrefresh() {
+    $('#datatables').dataTable().fnDraw()
+}
+setInterval("myrefresh()",10000);
+
+</script>
+{% endblock %}

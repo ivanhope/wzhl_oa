@@ -1,0 +1,246 @@
+{% extends 'public/index.html' %}
+{% block body %}
+<div id="app">
+    <div class="custom-tree-container">
+      <div class="block">
+        <p>基础技术中心</p>
+        <el-tree
+          :data="data"
+          node-key="id"
+          default-expand-all
+          highlight-current
+          indent="40"
+          :default-checked-keys="['{{ user }}']"
+          :expand-on-click-node="false">
+          <span class="custom-tree-node" slot-scope="{ node, data }">
+            <span :class="data.className">${ node.label }</span>
+            <span>
+              <el-button
+                type="text"
+                size="mini"
+                @click="() => append(data)">
+                增加
+              </el-button>
+              <el-button
+                type="text"
+                size="mini"
+                @click="() => remove(node, data)">
+                删除
+              </el-button>
+            </span>
+          </span>
+        </el-tree>
+      </div>
+    </div>
+</div>
+{% endblock body %}
+{% block js %}
+<script src="/static/vue.min.js"></script>
+<script src="/static/vuex.js"></script>
+<script src="/static/index.js"></script>
+<link rel="stylesheet" href="/static/index.css"/>
+<link rel="stylesheet" href="/static/assets/plugins/bootstrap/css/bootstrap.min.css"/>
+<script>
+    let id = 1000;
+    const vm = new Vue({
+        // 绑定对象
+        delimiters: ['${', '}'],
+        el:'#app',
+        data:{
+            data: [{
+                id: 1,
+                className:'department',
+                label: '开发部 张晋',
+                children: [{
+                  id: 11,
+                  className:'department',
+                  label: '红人助手含录制助手',
+                  children: [{
+                    id: 111,
+                    label: '顾超（组长,后端）'
+                  }, {
+                    id: 112,
+                    label: '陈冠 (wpf)'
+                  }, {
+                    id: 113,
+                    label: '王具民（音视频开发）'
+                  }]
+                },
+                {
+                  id: 12,
+                  className:'department',
+                  label: '榜中榜H5',
+                  children: [{
+                    id: 121,
+                    className:'repeat-name',
+                    label: '张晋（组长,后端）'
+                  }, {
+                    id: 122,
+                    label: '李子龙(前端)'
+                  }, {
+                    id: 123,
+                    label: '张利娜(后端)'
+                  }, {
+                    id: 124,
+                    label: '汪梦桥(后端)'
+                  }]
+                },
+                {
+                  id: 13,
+                  className:'department',
+                  label: '官网',
+                  children: [{
+                    id: 131,
+                    className:'repeat-name',
+                    label: '张晋（组长,后端）'
+                  }, {
+                    id: 132,
+                    label: '陈达(前端)'
+                  }, {
+                    id: 133,
+                    label: '李会(前端)'
+                  }, {
+                    id: 134,
+                    label: '章仁元(前端)'
+                  }, {
+                    id: 135,
+                    label: '周俊杰(php后端)'
+                  }, {
+                    id: 136,
+                    label: '张李兰(HTML+CSS)(兼任)'
+                  }, {
+                    id: 137,
+                    label: '吴作正(前端)'
+                  }]
+                },
+                {
+                  id: 14,
+                  className:'department',
+                  label: '通行证（及其它小项目）',
+                  children: [{
+                    id: 141,
+                    className:'repeat-name',
+                    label: '张晋（组长,后端'
+                  }, {
+                    id: 142,
+                    className:'repeat-name',
+                    label: '张李兰(前端)'
+                  }, {
+                    id: 143,
+                    className:'repeat-name',
+                    label: '陈达(前端)'
+                  }]
+                },
+                {
+                  id: 15,
+                  className:'department',
+                  label: 'AI',
+                  children: [{
+                    id: 151,
+                    className:'repeat-name',
+                    label: '项嘉（组长）'
+                  }, {
+                    id: 152,
+                    className:'repeat-name',
+                    label: '顾超'
+                  }, {
+                    id: 153,
+                    label: '刘露'
+                  }, {
+                    id: 154,
+                    className:'repeat-name',
+                    label: '苏曦'
+                  }]
+                },
+                {
+                  id: 16,
+                  className:'department',
+                  label: '百宝箱',
+                  children: [{
+                    id: 161,
+                    label: '韦平提(php后端)'
+                  }, {
+                    id: 162,
+                    className:'repeat-name',
+                    label: '章仁元（前端）(兼任)'
+                  }]
+                }]
+              }, {
+                id: 2,
+                className:'department',
+                label: '测试部 胡超',
+                children: [{
+                  id: 21,
+                  label: '秦志刚: 大数据,通行证'
+                }, {
+                  id: 22,
+                  label: '杜云: 官网,榜中榜,主播健康度'
+                }, {
+                  id: 23,
+                  label: '王珍珍: 官网,榜中榜'
+                }, {
+                  id: 24,
+                  label: '何大京: 录制助手客户端'
+                }, {
+                  id: 25,
+                  label: '胡安玲: 短视频红人'
+                }, {
+                  id: 26,
+                  label: '杨晓双：短视频企业/个人助手，红人'
+                }]
+              }, {
+                id: 3,
+                className:'department',
+                label: '运维部 倪培军',
+                children: [{
+                  id: 31,
+                  className:'repeat-name',
+                  label: '倪培军：直播个人助手、短视频企业/个人助手、大数'
+                }, {
+                  id: '薛智敏',
+                  label: '薛智敏：短视频企业/个人助手 大数据'
+                }, {
+                  id: 33,
+                  label: '徐福东：直播个人助手'
+                }, {
+                  id: 34,
+                  label: '徐磊：大数据'
+                }]
+              }]
+        },
+        methods:{
+            append(data) {
+                const newChild = { id: id++, label: 'testtest', children: [] };
+                if (!data.children) {
+                  this.$set(data, 'children', []);
+                }
+                data.children.push(newChild);
+              },
+
+            remove(node, data) {
+                const parent = node.parent;
+                const children = parent.data.children || parent.data;
+                const index = children.findIndex(d => d.id === data.id);
+                children.splice(index, 1);
+              },
+        }
+    });
+</script>
+<style>
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+    padding-right: 13px;
+  }
+  .department {
+      color: red;
+  }
+  .repeat-name {
+      color: #0b94ea;
+  }
+
+</style>
+{% endblock js %}

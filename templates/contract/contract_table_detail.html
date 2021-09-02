@@ -1,0 +1,1381 @@
+{% extends 'public/index.html' %}
+{% block css %}
+<link href="/static/assets/theme/default/style.min.css" rel="stylesheet" xmlns="http://www.w3.org/1999/html"/>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2-metronic.css"/>
+<link rel="stylesheet" href="/static/assets/css/DT_bootstrap.css"/>
+<!-- END PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-select/bootstrap-select.min.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/jquery-multi-select/css/multi-select.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-datepicker/css/datepicker.css" />
+
+{% endblock %}
+{% block body %}
+<div class="row">
+    <ul class="nav nav-pills nav-justified steps">
+{% if status < 31 or status > 33 %}
+    {% if status >= 0 %}
+        <li class="active">
+            <a class="step">
+                <span class="number">
+                     0
+                </span>
+                <span class="desc">
+                    <i class="fa fa-check"></i> 发起人
+                </span>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a class="step">
+                <span class="number">
+                     1
+                </span>
+                <span class="desc">
+                    <i class="fa fa-times"></i> 发起人
+                </span>
+            </a>
+        </li>
+    {% endif %}
+    {% if status > 1 %}
+        <li class="active">
+            <a class="step">
+                <span class="number">
+                     1
+                </span>
+                <span class="desc">
+                    <i class="fa fa-check"></i> 中心负责人
+                </span>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a class="step">
+                <span class="number">
+                     1
+                </span>
+                <span class="desc">
+                    <i class="fa fa-times"></i> 中心负责人
+                </span>
+            </a>
+        </li>
+    {% endif %}
+    {% if status > 2 %}
+        <li class="active">
+            <a class="step">
+                <span class="number">
+                     2
+                </span>
+                <span class="desc">
+                    <i class="fa fa-check"></i> 财务
+                </span>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a class="step">
+                <span class="number">
+                     2
+                </span>
+                <span class="desc">
+                    <i class="fa fa-times"></i> 财务
+                </span>
+            </a>
+        </li>
+    {% endif %}
+    {% if status > 3 %}
+        <li class="active">
+            <a class="step">
+                <span class="number">
+                     3
+                </span>
+                <span class="desc">
+                    <i class="fa fa-check"></i> 财务总
+                </span>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a class="step">
+                <span class="number">
+                     3
+                </span>
+                <span class="desc">
+                    <i class="fa fa-times"></i> 财务总
+                </span>
+            </a>
+        </li>
+    {% endif %}
+    {% if status > 4 %}
+        <li class="active">
+            <a class="step">
+                <span class="number">
+                     4
+                </span>
+                <span class="desc">
+                    <i class="fa fa-check"></i> 法务
+                </span>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a class="step">
+                <span class="number">
+                     4
+                </span>
+                <span class="desc">
+                    <i class="fa fa-times"></i> 法务
+                </span>
+            </a>
+        </li>
+    {% endif %}
+    {% if status > 5 %}
+        <li class="active">
+            <a class="step">
+                <span class="number">
+                     5
+                </span>
+                <span class="desc">
+                    <i class="fa fa-check"></i> 法务总
+                </span>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a class="step">
+                <span class="number">
+                     5
+                </span>
+                <span class="desc">
+                    <i class="fa fa-times"></i> 可选流程
+                </span>
+            </a>
+        </li>
+    {% endif %}
+    {% if status > 6 %}
+        <li class="active">
+            <a class="step">
+                <span class="number">
+                     6
+                </span>
+                <span class="desc">
+                    <i class="fa fa-check"></i> 可选流程
+                </span>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a class="step">
+                <span class="number">
+                     6
+                </span>
+                <span class="desc">
+                    <i class="fa fa-times"></i> 法务总
+                </span>
+            </a>
+        </li>
+    {% endif %}
+    {% if status > 7 %}
+        <li class="active">
+            <a class="step">
+                <span class="number">
+                     7
+                </span>
+                <span class="desc">
+                    <i class="fa fa-check"></i> 总经理
+                </span>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a class="step">
+                <span class="number">
+                     7
+                </span>
+                <span class="desc">
+                    <i class="fa fa-times"></i> 总经理
+                </span>
+            </a>
+        </li>
+    {% endif %}
+    {% if status > 8 %}
+        <li class="active">
+            <a class="step">
+                <span class="number">
+                     8
+                </span>
+                <span class="desc">
+                    <i class="fa fa-check"></i> 盖章
+                </span>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a class="step">
+                <span class="number">
+                     8
+                </span>
+                <span class="desc">
+                    <i class="fa fa-times"></i> 盖章
+                </span>
+            </a>
+        </li>
+    {% endif %}
+    {% if status > 9 and status != 80 %}
+        <li class="active">
+            <a class="step">
+                <span class="number">
+                     9
+                </span>
+                <span class="desc">
+                    <i class="fa fa-check"></i> 归档
+                </span>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a class="step">
+                <span class="number">
+                     9
+                </span>
+                <span class="desc">
+                    <i class="fa fa-times"></i> 归档
+                </span>
+            </a>
+        </li>
+    {% endif %}
+{% else %}
+    {% if status > 30 %}
+        <li class="active">
+            <a class="step">
+                <span class="number">
+                     0
+                </span>
+                <span class="desc">
+                    <i class="fa fa-check"></i> 发起人
+                </span>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a class="step">
+                <span class="number">
+                     1
+                </span>
+                <span class="desc">
+                    <i class="fa fa-times"></i> 发起人
+                </span>
+            </a>
+        </li>
+    {% endif %}
+    {% if status > 31 %}
+        <li class="active">
+            <a class="step">
+                <span class="number">
+                     1
+                </span>
+                <span class="desc">
+                    <i class="fa fa-check"></i> 财务
+                </span>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a class="step">
+                <span class="number">
+                     1
+                </span>
+                <span class="desc">
+                    <i class="fa fa-times"></i> 财务
+                </span>
+            </a>
+        </li>
+    {% endif %}
+    {% if status > 32 %}
+        <li class="active">
+            <a class="step">
+                <span class="number">
+                     2
+                </span>
+                <span class="desc">
+                    <i class="fa fa-check"></i> 法务
+                </span>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a class="step">
+                <span class="number">
+                     2
+                </span>
+                <span class="desc">
+                    <i class="fa fa-times"></i> 法务
+                </span>
+            </a>
+        </li>
+    {% endif %}
+{% endif %}
+
+    <br>
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <a id="back" class="btn btn-sm yellow">
+             返回 <i class="fa fa-reply"></i>
+        </a>
+    {% if status == -1 %}
+        <a id="edit" class="btn btn-sm blue">
+             修改 <i class="fa fa-edit"></i>
+        </a>
+    {% endif %}
+        <div class="portlet box grey">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-reorder"></i>合同信息
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form class="form-horizontal form-bordered" onsubmit ="getElementById('submit').disabled=true; return true;" target=”_blank” action="/contract_apply_detail/"  enctype="multipart/form-data" method="post">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="control-label col-md-1">合同编号</label>
+                            <div class="col-md-2">
+                                <input type="text" id="contract_uuid" name="contract_uuid" class="form-control">
+                            </div>
+                            <label class="control-label col-md-offset-2 col-md-1">原合同编号</label>
+                            <div class="col-md-2">
+                                <input type="text" id="origin_contract_uuid" name="origin_contract_uuid" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">* 我方签署公司</label>
+                            <div class="col-md-2">
+                                <input type="text" id="party_a" name="party_a" class="form-control">
+                            </div>
+                            <label class="control-label col-md-offset-2 col-md-1">申请时间</label>
+                            <div class="col-md-2">
+                                <input type="text" id="apply_time" name="apply_time" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">申请人</label>
+                            <div class="col-md-2">
+                                <input type="text" id="name" name="name" class="form-control">
+                            </div>
+                            <label class="control-label col-md-offset-2 col-md-1">所属中心</label>
+                            <div class="col-md-2">
+                                <input type="text" id="department" name="department" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">* 财务分类</label>
+                            <div class="col-md-2">
+                                <input type="text" id="finance_class" name="finance_class" class="form-control">
+                            </div>
+                            <label class="control-label col-md-offset-2 col-md-1">* 合同类型</label>
+                            <div class="col-md-2">
+                                <input type="text" id="contract_class" name="contract_class" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">* 合同名称</label>
+                            <div class="col-md-2">
+                                <input type="text" id="contract_name" name="contract_name" class="form-control">
+                            </div>
+                            <label class="control-label col-md-offset-2 col-md-1">* 合作方名称</label>
+                            <div class="col-md-2">
+                                <input type="text" id="party_b" name="party_b" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">联系地址</label>
+                            <div class="col-md-2">
+                                <input type="text" id="address" name="address" class="form-control">
+                            </div>
+                            <label class="control-label col-md-offset-2 col-md-1">* 联系人</label>
+                            <div class="col-md-2">
+                                <input type="text" id="contacts" name="contacts" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">邮箱</label>
+                            <div class="col-md-2">
+                                <input type="text" id="e_mail" name="e_mail" class="form-control">
+                            </div>
+                            <label class="control-label col-md-offset-2 col-md-1">* 电话1</label>
+                            <div class="col-md-2">
+                                <input type="text" id="phone_1" name="phone_1" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">电话2</label>
+                            <div class="col-md-2">
+                                <input type="text" id="phone_2" name="phone_2" class="form-control">
+                            </div>
+                            <label class="control-label col-md-offset-2 col-md-1">传真</label>
+                            <div class="col-md-2">
+                                <input type="text" id="fax" name="fax" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">开户行</label>
+                            <div class="col-md-2">
+                                <input type="text" id="bank" name="bank" class="form-control">
+                            </div>
+                            <label class="control-label col-md-offset-2 col-md-1">银行账号</label>
+                            <div class="col-md-2">
+                                <input type="text" id="bank_account" name="bank_account" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">* 合同概要</label>
+                            <div class="col-md-7">
+                                <textarea id="contract_detail" name="contract_detail" placeholder="" rows="2" maxlength="" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">* 货币类型</label>
+                            <div class="col-md-2">
+                                <input type="text" id="currency_type" name="currency_type" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">* 合同金额小写</label>
+                            <div class="col-md-2">
+                                <input type="text" id="contract_amount_figures" name="contract_amount_figures" class="form-control">
+                            </div>
+                            <label class="control-label col-md-offset-2 col-md-1">合同金额大写</label>
+                            <div class="col-md-2">
+                                <input type="text" id="contract_amount_words" name="contract_amount_words" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">特殊要求</label>
+                            <div class="col-md-7">
+                                <textarea id="special_requirements" name="special_requirements" placeholder="" rows="2" maxlength="" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">合同有效期</label>
+                            <div class="col-md-2">
+                                <div id="reportrange" class="btn default">
+                                    <input type="text" id="begin" name="begin" style="display: none">
+                                    <input type="text" id="end" name="end" style="display: none">
+                                    <i class="fa fa-calendar"></i>
+                                    <span>
+                                    </span>
+                                    <b class="fa fa-angle-down"></b>
+                                </div>
+                            </div>
+                            <label class="control-label col-md-offset-2 col-md-1">合作方资质</label>
+                            <div class="col-md-2">
+                                <input type="text" id="partner_qualification" name="partner_qualification" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">盖章情况</label>
+                            <div class="col-md-2">
+                                <input type="text" id="stamp_status" name="stamp_status" class="form-control">
+                            </div>
+                            <label class="control-label col-md-offset-2 col-md-1">归档情况</label>
+                            <div class="col-md-2">
+                                <input type="text" id="archive_status" name="archive_status" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                    {% if status == 0 %}
+                        <label class="control-label col-md-1">附件</label>
+                            <div  class="col-md-2">
+                                <div class="tab-content no-space">
+                                    <div class="tab-pane active" id="tab_images">
+                                        <div class="alert alert-success margin-bottom-10">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                                            <i class="fa fa-warning fa-lg"></i> 请将上传文件打包，选择ZIP或RAR格式进行上传
+                                        </div>
+                                        <div id="tab_images_uploader_container" class="text-align-reverse margin-bottom-10" style="position: relative;">
+                                            <a id="tab_images_uploader_pickfiles" href="javascript:;" class="btn yellow" style="position: relative; z-index: 1; float:left">
+                                                <i class="fa fa-plus"></i> 选择文件
+                                            </a>
+                                            <a id="tab_images_uploader_uploadfiles" href="javascript:;" class="btn blue" style="float:left; margin-left: 10px">
+                                                <i class="fa fa-share"></i> 上传文件
+                                            </a>
+                                        <div id="html5_191s5i9758q1p7bcdq1badmjb3_container" class="moxie-shim moxie-shim-html5" style="position: absolute; top: 0px; left: 1401px; width: 113px; height: 34px; overflow: hidden; z-index: 0;"><input id="html5_191s5i9758q1p7bcdq1badmjb3" type="file" style="font-size: 999px; opacity: 0; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;display:none" multiple="" accept="image/jpeg,image/gif,image/png,application/zip"></div></div>
+                                        <div class="row">
+                                            <div id="tab_images_uploader_filelist" class="col-md-6 col-sm-12"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                        <div class="form-group last">
+                            <label class="control-label col-md-1">备注</label>
+                            <div class="col-md-10">
+                                <textarea id="comment" name="comment" placeholder="" rows="3" maxlength="" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <input id="id" name="id" style="display:none">
+                        <input id="commit" name="commit" style="display:none">
+                    </div>
+                    <div class="form-actions fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-offset-11 col-md-9">
+                                    {% if status == 0 %}
+                                    <button id="submit" class="btn purple" type="submit"><i class="fa fa-check"></i> 提交</button>
+                                    {% endif %}
+                                    {% if status == -1 %}
+                                    <button id="submit2" class="btn green" type="submit" style="margin-left: -5%"><i class="fa fa-check"></i> 更新</button>
+                                    {% endif %}
+                                    {% if status != 0 %}
+                                        {% if status == 80 or status == 10 %}
+{#                                        <div id="cancellation" class="btn red" style="margin-left: -5%"><i class="fa fa-share"></i> 作废</div>#}
+                                            {% if status != 10 %}
+                                        <div id="approve" class="btn purple" style="margin-left: 1%"><i class="fa fa-share"></i> 审批</div>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if status != 10 and status != 11 and status != 33 %}
+                                        <div id="approve" class="btn purple" style="margin-left: 1%"><i class="fa fa-share"></i> 审批</div>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+{#    {% if request.session.personal_information_id %}#}
+        <div class="portlet box grey tasks-widget">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-globe"></i>流程明细
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table table-striped table-bordered table-hover table-full-width"  id="datatables">
+                    <thead>
+                    <tr>
+                        <th>提交时间</th>
+                        <th>提交人</th>
+                        <th>意见</th>
+                        <th>附件</th>
+                        <th>审批内容</th>
+                        <th>ID</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+{#    {% endif %}#}
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">合同审批</h4>
+            </div>
+
+
+
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div id="upload_div" class="form-group">
+                        <label class="col-sm-4 control-label">附件</label>
+                        <div  class="col-sm-8">
+                            <div class="tab-content no-space">
+                                <div class="tab-pane active" id="tab_images">
+                                    <div class="alert alert-success margin-bottom-10">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                                        <i class="fa fa-warning fa-lg"></i> 请将上传文件打包，选择ZIP或RAR格式进行上传
+                                    </div>
+                                    <div id="tab_images_uploader_container" class="text-align-reverse margin-bottom-10" style="position: relative;">
+                                        <a id="tab_images_uploader_pickfiles" href="javascript:;" class="btn yellow" style="position: relative; z-index: 1; float:left">
+                                            <i class="fa fa-plus"></i> 选择文件
+                                        </a>
+                                        <a id="tab_images_uploader_uploadfiles" href="javascript:;" class="btn blue" style="float:left; margin-left: 10px">
+                                            <i class="fa fa-share"></i> 上传文件
+                                        </a>
+                                    <div id="html5_191s5i9758q1p7bcdq1badmjb3_container" class="moxie-shim moxie-shim-html5" style="position: absolute; top: 0px; left: 1401px; width: 113px; height: 34px; overflow: hidden; z-index: 0;"><input id="html5_191s5i9758q1p7bcdq1badmjb3" type="file" style="font-size: 999px; opacity: 0; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;display:none" multiple="" accept="image/jpeg,image/gif,image/png,application/zip"></div></div>
+                                    <div class="row">
+                                        <div id="tab_images_uploader_filelist" class="col-md-6 col-sm-12"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="add_process_div" class="form-group">
+                        <label class="col-sm-4 control-label">增加流程</label>
+                        <div  class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                                <input type="text" class="form-control tt-hint"
+                                       disabled="" autocomplete="off" spellcheck="false"
+                                       style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                <div type="text" id="add_process"
+                                     name="typeahead_example_modal_1"
+                                     class="form-control tt-input" autocomplete="off"
+                                     spellcheck="false" dir="auto"
+                                     style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"></div><pre
+                                    aria-hidden="true"
+                                    style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                    class="tt-dropdown-menu"
+                                    style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                    class="tt-dataset-1"></div></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group last">
+                        <label class="col-sm-4 control-label">备注</label>
+
+                        <div class="col-sm-6">
+                            <textarea class="form-control" id='comment2' style="width: 290px" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="id" style="display: none"></div>
+            <div id="button" class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn green" onclick="agree()"><i class="fa fa-check"></i> 通过</button>
+                {% if status != 31 and status != 32 %}
+                <button type="button" class="btn blue" onclick="back_edit()"><i class="fa fa-edit"></i> 退回修改</button>
+                {% endif %}
+                <button type="button" class="btn red" onclick="disagree()"><i class="fa fa-times"></i> 不通过</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal2" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4>您确定要作废吗</h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group last">
+                        <label class="col-sm-4 control-label">备注</label>
+
+                        <div class="col-sm-6">
+                            <textarea class="form-control" id='comment2' style="width: 290px" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="cancellation()"><i class="fa fa-check"></i>确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/datatables-->
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="/static/assets/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/DT_bootstrap.js"></script>
+
+<!--<script src="/static/assets/plugins/context.js"></script>-->
+<!--<script src="/static/assets/plugins/jstree/dist/jstree.min.js"></script>-->
+<script src="/static/assets/plugins/holder.js"></script>
+<script src="/static/assets/plugins/stilearn-base.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
+<script src="/static/assets/plugins/select2/select2.js"></script>
+<script src="/static/assets/plugins/datatables/extras/TableTools.min.js"></script>
+<script src="/static/assets/scripts/custom/table-managed.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/fuelux/js/spinner.min.js" ></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.js" ></script>
+<script type="text/javascript" src="/static/assets/plugins/jquery.input-ip-address-control-1.0.min.js" ></script>
+<script src="/static/assets/plugins/jquery.pwstrength.bootstrap/src/pwstrength.js" ></script>
+<script src="/static/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js" ></script>
+<script src="/static/assets/plugins/jquery-tags-input/jquery.tagsinput.min.js" ></script>
+<script src="/static/assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" ></script>
+<script src="/static/assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js" ></script>
+<script src="/static/assets/plugins/typeahead/handlebars.min.js" ></script>
+<script src="/static/assets/plugins/typeahead/typeahead.min.js" type="text/javascript"></script>
+<script src="/static/assets/scripts/custom/components-form-tools.js"></script>
+<script src="/static/assets/plugins/plupload/js/plupload.full.min.js" ></script>
+
+<script type="text/javascript">
+var oTable;
+var aButtons
+/* Formating function for row details */
+
+$(document).ready(function () {
+
+    $('#reportrange').daterangepicker({
+        opens: (App.isRTL() ? 'left' : 'right'),
+
+    //    startDate: moment().subtract('days', 29),
+    //    endDate: moment(),
+{#        minDate: moment().subtract(90,'days'),#}
+{#        maxDate: moment().add(90,'days'),#}
+{#        dateLimit: {#}
+{#            days: 2800#}
+{#        },#}
+        showDropdowns: true,
+        showWeekNumbers: false,
+        timePicker: false,
+        timePickerIncrement: 1,
+        timePicker12Hour: false,
+        ranges: {
+           'Today': [moment(), moment()],
+{#           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],#}
+{#           'Last 7 Days': [moment().subtract(6, 'days'), moment()],#}
+{#           'This Month': [moment().startOf('month'), moment().endOf('month')],#}
+{#           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]#}
+        },
+        buttonClasses: ['btn'],
+        applyClass: 'green',
+        cancelClass: 'default',
+        format: 'YYYY/MM/DD',
+        separator: ' to ',
+        locale: {
+            applyLabel: 'Apply',
+            fromLabel: 'From',
+            toLabel: 'To',
+            customRangeLabel: '自定义',
+            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            firstDay: 1
+        }
+        },
+        function (start, end) {
+            $('#reportrange span').html(start.format('YYYY-MM-DD') + '  ->  ' + end.format('YYYY-MM-DD'));
+            $('#begin').val(start.format('YYYY-MM-DD'));
+            $('#end').val(end.format('YYYY-MM-DD'))
+        }
+    );
+
+
+    $('#finance_class').select2({
+        multiple: false,
+        placeholder: '请选择财务分类',
+        allowClear: true,
+        data: [{'text':'收','id':'收'},{'text':'支','id':'支'},{'text':'无金额','id':'无金额'}]
+    });
+
+    $('#contract_class').select2({
+        multiple: false,
+        placeholder: '请选择合同分类',
+        allowClear: true,
+        data: [{'text':'商务合作','id':'商务合作'},{'text':'艺人经纪','id':'艺人经纪'},{'text':'市场框架','id':'市场框架'},
+               {'text':'技术开发','id':'技术开发'},{'text':'行政','id':'行政'},{'text':'人事','id':'人事'},
+               {'text':'财务','id':'财务'},{'text':'法务','id':'法务'},{'text':'其他','id':'其他'}]
+    });
+
+    $('#currency_type').select2({
+        multiple: false,
+        placeholder: '请选择货币类型',
+        allowClear: true,
+        data: [{'text':'人民币','id':'人民币'},{'text':'美元','id':'美元'},{'text':'港币','id':'港币'}]
+    });
+
+    $('#party_a').select2({
+        multiple: false,
+        placeholder: '请选择公司',
+        allowClear: true,
+        data: [{'text':'上海六界信息技术有限公司','id':'上海六界信息技术有限公司'},
+               {'text':'北京七葫芦科技有限公司','id':'北京七葫芦科技有限公司'},
+               {'text':'霍尔果斯柒色葫芦广告科技有限公司','id':'霍尔果斯柒色葫芦广告科技有限公司'},
+               {'text':'Six World Inc.','id':'Six World Inc.'},
+               {'text':'六界娱乐有限公司（SIX WORLD ENTERTAINMENT LIMITED）','id':'六界娱乐有限公司（SIX WORLD ENTERTAINMENT LIMITED）'},
+               {'text':'上海陆色网络科技有限公司','id':'上海陆色网络科技有限公司'},
+               {'text':'上海果豆网络科技有限公司','id':'上海果豆网络科技有限公司'},
+               {'text':'北京葫芦豆科技有限公司','id':'北京葫芦豆科技有限公司'},
+               {'text':'上海六赞网络科技有限公司','id':'上海六赞网络科技有限公司'},
+               {'text':'北京六娱信息技术有限公司','id':'北京六娱信息技术有限公司'},
+               {'text':'浙江星果文化传媒有限公司','id':'浙江星果文化传媒有限公司'},
+               {'text':'浙江六趣网络科技有限公司','id':'浙江六趣网络科技有限公司'}]
+    });
+
+
+{#    $('#phone').inputmask({#}
+{#        "mask": "99999999999"#}
+{#    });#}
+{##}
+{#    $('#date_of_entry').attr('disabled',true)#}
+{##}
+{##}
+{#    $('#graduate_date').inputmask("y-m-d", {#}
+{#        "placeholder": "yyyy-mm-dd"#}
+{#    })#}
+
+
+
+{#{% if request.session.personal_information %}#}
+{#    {% ifequal request.session.personal_information '保存成功' %}#}
+{#        toastr.success('保存成功');#}
+{#        setTimeout('location.href = "/personal_information_table/"',500);#}
+{#    {% else %}#}
+{#        toastr.error('{{ request.session.personal_information }}');#}
+{#    {% endifequal %}#}
+{#{% endif %}#}
+{##}
+{#    $('#resumes_button').on('change',function(){#}
+{#        $('#resumes_show').html($('#resumes').val())#}
+{#    });#}
+    $('#submit').attr('disabled',true)
+
+{% if status == 80 %}
+    $('#button').hide()
+{% endif %}
+
+{% if status == 31 or status == 32 %}
+    $('#upload_div').hide()
+    $('#add_process_div').hide()
+{% endif %}
+
+{% if request.session.contract_id %}
+    $('#party_a').select2('data',{'text':'{{ party_a }}','id':'{{ party_a }}'});
+    $('#apply_time').val('{{ apply_time }}');
+    $('#name').val('{{ name }}');
+    $('#department').val('{{ department }}');
+    $('#finance_class').select2('data',{'text':'{{ finance_class }}','id':'{{ finance_class }}'});
+    $('#contract_class').select2('data',{'text':'{{ contract_class }}','id':'{{ contract_class }}'});
+    $('#contract_uuid').val('{{ contract_uuid }}');
+    $('#origin_contract_uuid').val('{{ origin_contract_uuid }}');
+    $('#contract_name').val('{{ contract_name }}');
+    $('#party_b').val('{{ party_b }}');
+    $('#address').val('{{ address }}');
+    $('#contacts').val('{{ contacts }}');
+    $('#e_mail').val('{{ e_mail }}');
+    $('#phone_1').val('{{ phone_1 }}');
+    $('#phone_2').val('{{ phone_2 }}');
+    $('#fax').val('{{ fax }}');
+    $('#bank').val('{{ bank }}');
+    $('#bank_account').val('{{ bank_account }}');
+    $('#contract_detail').val('{{ contract_detail }}');
+    $('#currency_type').select2('data',{'text':'{{ currency_type }}','id':'{{ currency_type }}'});
+    $('#contract_amount_figures').val('{{ contract_amount_figures }}');
+    $('#contract_amount_words').val('{{ contract_amount_words }}');
+    $('#special_requirements').val('{{ special_requirements }}');
+    $('#reportrange span').html('{{ contract_begin_time }}' + '  ->  ' + '{{ contract_end_time }}');
+    $('#begin').val('{{ contract_begin_time }}')
+    $('#end').val('{{ contract_begin_time }}')
+    $('#partner_qualification').val('{{ partner_qualification }}');
+    $('#comment').val('{{ comment }}')
+    {% if status != -1 %}
+        $('#submit').hide()
+    {% endif %}
+{% else %}
+    $('#name').val('{{ name }}');
+    $('#department').val('{{ department }}');
+    $('#reportrange span').html(moment().format('YYYY-MM-DD') + '  ->  ' + moment().format('YYYY-MM-DD'));
+    $('#begin').val(moment().format('YYYY-MM-DD'));
+    $('#end').val(moment().format('YYYY-MM-DD'));
+{% endif %}
+
+
+{% if stamp_status %}
+    $('#stamp_status').val('已盖章');
+{% else %}
+    $('#stamp_status').val('未盖章');
+{% endif %}
+{% if archive_status %}
+    $('#archive_status').val('已归档');
+{% else %}
+    $('#archive_status').val('未归档');
+{% endif %}
+
+
+{#    $('#resumes_show').html('{{ resumes }}')#}
+{#    $('#resumes_show').attr('href','/media/{{ resumes_path }}')#}
+{#    $('#direction').val('{{ direction }}')#}
+{#    $('#resource_state').select2('data',{'text':'{{ resource_state }}','id':'{{ resource_state }}'})#}
+{#    $('#comment').val('{{ comment }}')#}
+{#    $('#state_change_time').val('{{ state_change_time }}')#}
+{#    $('#executor').select2('data',{'text':'{{ executor }}','id':'{{ executor }}'})#}
+    $('#id').val('{{ id }}')
+
+    $('#commit').val('1')
+
+
+
+{#    loaddata()#}
+
+    $('#back').on('click',function(){
+        history.go(-1)
+    });
+
+{#{% if status == -1 %}#}
+{#    $('#contract_uuid').attr('disabled',true);#}
+{#    $('#origin_contract_uuid').attr('disabled',false);#}
+{#    $('#party_a').attr('disabled',false);#}
+{#    $('#apply_time').attr('disabled',true);#}
+{#    $('#name').attr('disabled',true);#}
+{#    $('#department').attr('disabled',true);#}
+{#    $('#finance_class').attr('disabled',false);#}
+{#    $('#contract_class').attr('disabled',false);#}
+{#    $('#contract_name').attr('disabled',false);#}
+{#    $('#party_b').attr('disabled',false);#}
+{#    $('#address').attr('disabled',false);#}
+{#    $('#contacts').attr('disabled',false);#}
+{#    $('#e_mail').attr('disabled',false);#}
+{#    $('#phone_1').attr('disabled',false);#}
+{#    $('#phone_2').attr('disabled',false);#}
+{#    $('#fax').attr('disabled',false);#}
+{#    $('#bank').attr('disabled',false);#}
+{#    $('#bank_account').attr('disabled',false);#}
+{#    $('#contract_detail').attr('disabled',false);#}
+{#    $('#contract_amount_figures').attr('disabled',false);#}
+{#    $('#contract_amount_words').attr('disabled',true);#}
+{#    $('#special_requirements').attr('disabled',false);#}
+{#    $('#reportrange').attr('disabled',false);#}
+{#    $('#partner_qualification').attr('disabled',false);#}
+{#    $('#stamp_status').attr('disabled',true);#}
+{#    $('#archive_status').attr('disabled',true);#}
+{#    $('#comment').attr('disabled',false);#}
+{% if request.session.contract_id %}
+    $('#contract_uuid').attr('disabled',true);
+    $('#origin_contract_uuid').attr('disabled',true);
+    $('#party_a').attr('disabled',true);
+    $('#apply_time').attr('disabled',true);
+    $('#name').attr('disabled',true);
+    $('#department').attr('disabled',true);
+    $('#finance_class').attr('disabled',true);
+    $('#contract_class').attr('disabled',true);
+    $('#contract_name').attr('disabled',true);
+    $('#party_b').attr('disabled',true);
+    $('#address').attr('disabled',true);
+    $('#contacts').attr('disabled',true);
+    $('#e_mail').attr('disabled',true);
+    $('#phone_1').attr('disabled',true);
+    $('#phone_2').attr('disabled',true);
+    $('#fax').attr('disabled',true);
+    $('#bank').attr('disabled',true);
+    $('#bank_account').attr('disabled',true);
+    $('#contract_detail').attr('disabled',true);
+    $('#currency_type').attr('disabled',true);
+    $('#contract_amount_figures').attr('disabled',true);
+    $('#contract_amount_words').attr('disabled',true);
+    $('#special_requirements').attr('disabled',true);
+    $('#reportrange').attr('disabled',true);
+    $('#partner_qualification').attr('disabled',true);
+    $('#stamp_status').attr('disabled',true);
+    $('#archive_status').attr('disabled',true);
+    $('#comment').attr('disabled',true);
+{% else %}
+    $('#contract_uuid').attr('disabled',true);
+    $('#origin_contract_uuid').attr('disabled',false);
+    $('#party_a').attr('disabled',false);
+    $('#apply_time').attr('disabled',true);
+    $('#name').attr('disabled',true);
+    $('#department').attr('disabled',true);
+    $('#finance_class').attr('disabled',false);
+    $('#contract_class').attr('disabled',false);
+    $('#contract_name').attr('disabled',false);
+    $('#party_b').attr('disabled',false);
+    $('#address').attr('disabled',false);
+    $('#contacts').attr('disabled',false);
+    $('#e_mail').attr('disabled',false);
+    $('#phone_1').attr('disabled',false);
+    $('#phone_2').attr('disabled',false);
+    $('#fax').attr('disabled',false);
+    $('#bank').attr('disabled',false);
+    $('#bank_account').attr('disabled',false);
+    $('#contract_detail').attr('disabled',false);
+    $('#currency_type').attr('disabled',false);
+    $('#contract_amount_figures').attr('disabled',false);
+    $('#contract_amount_words').attr('disabled',true);
+    $('#special_requirements').attr('disabled',false);
+    $('#reportrange').attr('disabled',false);
+    $('#partner_qualification').attr('disabled',false);
+    $('#stamp_status').attr('disabled',true);
+    $('#archive_status').attr('disabled',true);
+    $('#comment').attr('disabled',false);
+{% endif %}
+
+    $('#edit').on('click',function(){
+        $('#contract_uuid').attr('disabled',true);
+        $('#origin_contract_uuid').attr('disabled',false);
+        $('#party_a').attr('disabled',false);
+        $('#apply_time').attr('disabled',true);
+        $('#name').attr('disabled',true);
+        $('#department').attr('disabled',true);
+        $('#finance_class').attr('disabled',false);
+        $('#contract_class').attr('disabled',false);
+        $('#contract_name').attr('disabled',false);
+        $('#party_b').attr('disabled',false);
+        $('#address').attr('disabled',false);
+        $('#contacts').attr('disabled',false);
+        $('#e_mail').attr('disabled',false);
+        $('#phone_1').attr('disabled',false);
+        $('#phone_2').attr('disabled',false);
+        $('#fax').attr('disabled',false);
+        $('#bank').attr('disabled',false);
+        $('#bank_account').attr('disabled',false);
+        $('#contract_detail').attr('disabled',false);
+        $('#currency_type').attr('disabled',false);
+        $('#contract_amount_figures').attr('disabled',false);
+        $('#contract_amount_words').attr('disabled',true);
+        $('#special_requirements').attr('disabled',false);
+        $('#reportrange').attr('disabled',false);
+        $('#partner_qualification').attr('disabled',false);
+        $('#stamp_status').attr('disabled',true);
+        $('#archive_status').attr('disabled',true);
+        $('#comment').attr('disabled',false);
+        $('#submit').show()
+        $('#edit').attr('disabled',true);
+        $.post('/contract_set_session/', {commit:1}, function (d) {})
+    });
+
+    $('#contract_amount_figures').on('change',function(){
+        $('#contract_amount_words').val('')
+    });
+
+
+    $('#upload_button').on('change',function(){
+        $('#upload_show').html($('#upload').val())
+    })
+    $('#upload_show').html('{{ upload }}')
+    $('#upload_show').attr('href','/media/{{ upload_path }}')
+
+    var PluploadCustom = function () {
+        var handleImages = function() {
+            // see http://www.plupload.com/
+            var uploader = new plupload.Uploader({
+                runtimes : 'html5,flash,silverlight,html4',
+
+                browse_button : document.getElementById('tab_images_uploader_pickfiles'), // you can pass in id...
+                container: document.getElementById('tab_images_uploader_container'), // ... or DOM Element itself
+
+                url : "/contract_get_upload/",
+
+                filters : {
+                    max_file_size : '100000000mb',
+                    chunk_size : '1000mb',
+                    mime_types: [
+                        {title : "Zip files", extensions : "zip"},
+                        {title : "RAR files", extensions : "rar"}
+                    ]
+                },
+
+                // Flash settings
+                flash_swf_url : 'assets/plugins/plupload/js/Moxie.swf',
+
+                // Silverlight settings
+                silverlight_xap_url : 'assets/plugins/plupload/js/Moxie.xap',
+                headers : {
+                    "X-CSRFToken":getCookie('_csrf_token')
+                },
+                init: {
+                    PostInit: function() {
+                        $('#tab_images_uploader_filelist').html("");
+
+                        $('#tab_images_uploader_uploadfiles').click(function() {
+                            uploader.start();
+                            return false;
+                        });
+
+                        $('#tab_images_uploader_filelist').on('click', '.added-files .remove', function(){
+                            uploader.removeFile($(this).parent('.added-files').attr("id").replace('uploaded_file_',''));
+                            $(this).parent('.added-files').remove();
+                        });
+                    },
+
+                    FilesAdded: function(up, files) {
+                        plupload.each(files, function(file) {
+                            $('#tab_images_uploader_filelist').text("")
+                            $('#tab_images_uploader_filelist').append('<div class="alert alert-warning added-files" id="uploaded_file_' + file.id + '" style="margin-top:5px">' + file.name + '(' + plupload.formatSize(file.size) + ') <span class="status label label-info"></span>&nbsp;<a href="javascript:;" style="margin-top:-5px" class="remove pull-right btn btn-sm red"><i class="fa fa-times"></i> 移除</a></div>');
+                        });
+                    },
+
+                    UploadProgress: function(up, file) {
+                        $('#uploaded_file_' + file.id + ' > .status').html(file.percent + '%');
+                    },
+
+                    FileUploaded: function(up, file, response) {
+                        var response = $.parseJSON(response.response);
+                        if (response.code == 0) {
+                            var id = response.id; // uploaded file's unique name. Here you can collect uploaded file names and submit an jax request to your server side script to process the uploaded files and update the images tabke
+
+                            $('#uploaded_file_' + file.id + ' > .status').removeClass("label-info").addClass("label-success").html('<i class="fa fa-check"></i>'+response.msg); // set successfull operation
+                            $('#tab_images_uploader_filelist').text("")
+                            toastr.success(response.msg)
+                            $('#submit').attr('disabled',false)
+                            $('#button').show()
+{#                            $('#datatables').dataTable().fnDraw()#}
+                        } else {
+                            $('#uploaded_file_' + file.id + ' > .status').removeClass("label-info").addClass("label-danger").html('<i class="fa fa-warning"></i>'+response.msg); // set failed operation
+                            App.alert({type: 'danger', message: '文件上传失败，请重新上传', closeInSeconds: 10, icon: 'warning'});
+                            toastr.error(response.msg)
+                        }
+                    },
+                    Error: function(up, err) {
+                        App.alert({type: 'danger', message: err.message, closeInSeconds: 10, icon: 'warning'});
+                    }
+                }
+            });
+            uploader.init();
+        }
+
+        return {
+            //main function to initiate the module
+            init: function () {
+                handleImages();
+            }
+        };
+    }();
+
+    PluploadCustom.init()
+
+
+    $('#approve').on('click',function(){
+        $("#myModal").modal('show')
+    })
+
+    $('#cancellation').on('click',function(){
+        $("#myModal2").modal('show')
+    })
+
+
+    $.post('/order_form_dropdown/', {}, function (d) {
+        $('#add_process').select2({
+            multiple: true,
+            placeholder: '请选择员工',
+            allowClear: true,
+            data: d['list']
+        });
+    })
+
+    var status = '{{ status }}'
+    if (status == '4') {
+        $('#add_process_div').show()
+    }else{
+        $('#add_process_div').hide()
+    }
+
+
+    loaddata()
+
+});
+
+function loaddata() {
+    oTable = $('#datatables').dataTable({
+        "sAjaxSource": "/contract_process_detail_data/?rand=" + Math.random(),
+        "sDom": "<'row-fluid'<'span6'T><'span6'f>r><'table-scrollable't><'fluid'<'span3'l><'span4'i><'span5'p>>",
+        "bServerSide": true,
+        "bPaginate": true, // 是否使用分页
+        "bProcessing": true, //是否显示正在处理的提示
+        "bLengthChange": true, //是否启用设置每页显示记录数
+        "bFilter": true, //是否使用搜索
+        "bStateSave": true,
+        "bDestroy": true,
+        "bSort": true, //是否使用排序
+        "bAutoWidth": true, //列的宽度会根据table的宽度自适应
+        "sPaginationType": "bootstrap",
+//        "aLengthMenu": [
+//                    [5, 15, 20, -1],
+//                    [5, 15, 20, "All"] // change per page values here
+//                ],
+        "oTableTools": {
+            "sRowSelect": "",
+            'aButtons': []
+        },
+        "aoColumns": [
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "30%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "5%", 'bVisible': false}
+
+
+        ],
+        "aaSorting": [
+            [6, 'desc']
+        ],
+        "oLanguage": {
+            "sProcessing": "正在加载数据...",
+            'sSearch': '数据筛选:',
+            "sLengthMenu": "每页显示 _MENU_ 项记录",
+            "sZeroRecords": "没有符合项件的数据...",
+            "sInfo": "当前数据为从第 _START_ 到第 _END_ 项数据；总共有 _TOTAL_ 项记录",
+            "sInfoEmpty": "显示 0 至 0 共 0 项",
+            "sInfoFiltered": "(_MAX_)",
+            "oPaginate": {
+                "sFirst": '首页',
+                "sPrevious": "上一页",
+                "sNext": "下一页",
+                "sLast": "最后一页"
+            }
+
+        },
+        "fnInitComplete": function (oSettings, json) {
+            $('input[type=checkbox],input[type=radio],input[type=file][name!=resumes]').uniform()
+        },
+        "fnDrawCallback": function (oSettings) {
+            $('input[type=checkbox],input[type=radio],input[type=file][name!=resumes]').uniform()
+        },
+        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            if(aData[2] == 1){
+                $('td:eq(2)',nRow).html('<div>审批通过</div>')
+            }else if(aData[2] == 0){
+                $('td:eq(2)',nRow).html('<div>审批不通过</div>')
+            }else if(aData[2] == 2){
+                $('td:eq(2)',nRow).html('<div>退回修改</div>')
+            }else if(aData[2] == 3){
+                $('td:eq(2)',nRow).html('<div>申请作废</div>')
+            }else if(aData[2] == 9){
+                $('td:eq(2)',nRow).html('<div>合同申请</div>')
+            }else if(aData[2] == -1){
+                $('td:eq(2)',nRow).html('<div>申请人修改</div>')
+            }
+            $('td:eq(3)',nRow).on('click',function(){
+                location.href = '/'+aData[3]
+            })
+            var regx = new RegExp('^.*/');
+            $('td:eq(3)',nRow).html(aData[3].replace(regx,''))
+        },
+        "fnServerData": function (sSource, aoData, fnCallback) {
+            aoData.push({csrfmiddlewaretoken: '{{ csrf_token }}'})
+            $.ajax({
+                "dataType": 'json',
+                "type": "POST",
+                "url": sSource,
+                "data": aoData,
+                "success": fnCallback
+            });
+        }
+    });
+}
+
+
+{% if request.session.contract_result %}
+    {% ifequal request.session.contract_result '保存成功' %}
+        toastr.success('保存成功')
+        setTimeout('location.href = "/contract_apply/"',500)
+    {% else %}
+        toastr.error('{{ request.session.contract_result }}')
+    {% endifequal %}
+{% endif %}
+
+
+
+function agree(){
+    var id = $('#id').val();
+    var status = '{{ status }}';
+    var process_type = '{{ process_type }}';
+    var comment = $('#comment2').val();
+    var add_process = $('#add_process').select2('data');
+
+    if (add_process == ''){
+        add_process = ''
+    }else{
+        add_process = add_process[0]['text']
+    }
+    $.post('/contract_approve_process/', {id:id, status:status, process_type:process_type, comment:comment, add_process:add_process, flag:1}, function (d) {
+        if (d.code == 0) {
+            toastr.success(d.msg)
+            $('#datatables').dataTable().fnDraw()
+            setTimeout('location.href = "/contract_approve/"',500)
+        } else {
+            toastr.error(d.msg)
+        }
+    })
+    $('#myModal').modal('hide')
+}
+
+function back_edit(){
+    var id = $('#id').val()
+    var status = '{{ status }}'
+    var process_type = '{{ process_type }}'
+    var comment = $('#comment2').val()
+    var add_process = $('#add_process').select2('data')
+    if (add_process == null){
+        add_process = ''
+    }else{
+        add_process = add_process['text']
+    }
+    $.post('/contract_approve_process/', {id:id, status:status, process_type:process_type, comment:comment, add_process:add_process, flag:2}, function (d) {
+        if (d.code == 0) {
+            toastr.success(d.msg)
+            $('#datatables').dataTable().fnDraw()
+            setTimeout('location.href = "/contract_approve/"',500)
+        } else {
+            toastr.error(d.msg)
+        }
+    })
+    $('#myModal').modal('hide')
+}
+
+function disagree(){
+    var id = $('#id').val()
+    var status = '{{ status }}'
+    var process_type = '{{ process_type }}'
+    var comment = $('#comment2').val()
+    var add_process = $('#add_process').select2('data')
+    if (add_process == null){
+        add_process = ''
+    }else{
+        add_process = add_process['text']
+    }
+    $.post('/contract_approve_process/', {id:id, status:status, process_type:process_type, comment:comment, add_process:add_process, flag:0}, function (d) {
+        if (d.code == 0) {
+            toastr.success(d.msg)
+            $('#datatables').dataTable().fnDraw()
+            setTimeout('location.href = "/contract_approve/"',500)
+        } else {
+            toastr.error(d.msg)
+        }
+    })
+    $('#myModal').modal('hide')
+}
+
+function cancellation(){
+    var id = $('#id').val()
+    var status = '{{ status }}'
+{#    var process_type = '{{ process_type }}'#}
+    var comment = $('#comment2').val()
+{#    var add_process = $('#add_process').select2('data')#}
+{#    if (add_process == null){#}
+{#        add_process = ''#}
+{#    }else{#}
+{#        add_process = add_process['text']#}
+{#    }#}
+    $.post('/contract_approve_process/', {id:id, status:status, comment:comment, flag:3}, function (d) {
+        if (d.code == 0) {
+            toastr.success(d.msg)
+            $('#datatables').dataTable().fnDraw()
+            setTimeout('location.href = "/contract_apply/"',500)
+        } else {
+            toastr.error(d.msg)
+        }
+    })
+    $('#myModal').modal('hide')
+}
+
+function add(){
+    $.post('/personal_information_interview_set_session/', {id:0}, function (d) {
+        location.href = '/personal_information_interview_detail/'
+    })
+}
+
+</script>
+{% endblock %}

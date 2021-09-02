@@ -1,0 +1,78 @@
+{% extends 'public/index.html' %}
+{% block body %}
+<div id="app">
+    <el-row :gutter="20">
+        <el-col :span="7">
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>人事相关</span>
+                </div>
+                <el-alert
+                title="制度"
+                type="info"
+                :closable="false">
+                    {% for i in hr_forms_zd %}
+                    <a href="/media/used_form/hr/zd/{{ i }}">{{ i }}</a>
+                    <br/>
+                    {% endfor %}
+                </el-alert>
+                <hr />
+                <el-alert
+                title="表单"
+                type="info"
+                :closable="false">
+                    {% for i in hr_forms_bd %}
+                    <a href="/media/used_form/hr/bd/{{ i }}">{{ i }}</a>
+                    <br/>
+                    {% endfor %}
+                </el-alert>
+            </el-card>
+        </el-col>
+        <el-col :span="7">
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>财务相关</span>
+                </div>
+                <el-alert
+                title="制度"
+                type="info"
+                :closable="false">
+                    {% for i in fn_forms_zd %}
+                    <a href="/media/used_form/fn/zd/{{ i }}">{{ i }}</a>
+                    <br/>
+                    {% endfor %}
+                </el-alert>
+                <hr />
+                <el-alert
+                title="表单"
+                type="info"
+                :closable="false">
+                    {% for i in fn_forms_bd %}
+                    <a href="/media/used_form/fn/bd/{{ i }}">{{ i }}</a>
+                    <br/>
+                    {% endfor %}
+                </el-alert>
+            </el-card>
+        </el-col>
+    </el-row>
+</div>
+{% endblock body %}
+{% block js %}
+<script src="/static/vue.min.js"></script>
+<script src="/static/vuex.js"></script>
+<script src="/static/index.js"></script>
+<link rel="stylesheet" href="/static/index.css"/>
+<link rel="stylesheet" href="/static/assets/plugins/bootstrap/css/bootstrap.min.css"/>
+<script>
+    const vm = new Vue({
+        // 绑定对象
+        el:'#app',
+        data:{
+        },
+        methods:{
+        }
+    });
+</script>
+{% endblock js %}
+
+

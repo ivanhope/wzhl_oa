@@ -1,0 +1,723 @@
+{% extends 'public/index.html' %}
+{% block css %}
+<link href="/static/assets/theme/default/style.min.css" rel="stylesheet"/>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2-metronic.css"/>
+<link rel="stylesheet" href="/static/assets/css/DT_bootstrap.css"/>
+<!-- END PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-select/bootstrap-select.min.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/jquery-multi-select/css/multi-select.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-datepicker/css/datepicker.css" />
+
+{% endblock %}
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet box grey tasks-widget">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-globe"></i>资产表
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table table-striped table-bordered table-hover table-full-width"  id="datatables">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>描述</th>
+                        <th>型号</th>
+                        <th>序列号</th>
+                        <th>剩余月</th>
+                        <th>部门</th>
+                        <th>员工</th>
+                        <th>购买日期</th>
+                        <th>含税价</th>
+                        <th>原价</th>
+                        <th>残值</th>
+                        <th>折旧价</th>
+                        <th>累计折旧价</th>
+                        <th>剩余价值</th>
+                        <th>备注</th>
+                        <th>ID</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">添加资产</h4>
+                </div>
+                <div class="modal-body form">
+                    <form action="#" class="form-horizontal form-row-seperated">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">资产编号</label>
+
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="twitter-typeahead"
+                                          style="position: relative; display: inline-block;">
+                                        <input type="text" class="form-control tt-hint"
+                                               disabled="" autocomplete="off" spellcheck="false"
+                                               style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                        <input type="text" id="FANO"
+                                               name="typeahead_example_modal_1"
+                                               class="form-control tt-input" autocomplete="off"
+                                               spellcheck="false" dir="auto"
+                                               style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"><pre
+                                            aria-hidden="true"
+                                            style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                            class="tt-dropdown-menu"
+                                            style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                            class="tt-dataset-1"></div></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">描述</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="twitter-typeahead"
+                                          style="position: relative; display: inline-block;">
+                                        <input type="text" class="form-control tt-hint"
+                                               disabled="" autocomplete="off" spellcheck="false"
+                                               style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                        <div type="text" id="description"
+                                             name="typeahead_example_modal_1"
+                                             class="form-control tt-input" autocomplete="off"
+                                             spellcheck="false" dir="auto"
+                                             style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"></div><pre
+                                            aria-hidden="true"
+                                            style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                            class="tt-dropdown-menu"
+                                            style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                            class="tt-dataset-1"></div></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">型号</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="twitter-typeahead"
+                                          style="position: relative; display: inline-block;">
+                                        <input type="text" class="form-control tt-hint"
+                                               disabled="" autocomplete="off" spellcheck="false"
+                                               style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                        <input type="text" id="model"
+                                               name="typeahead_example_modal_1"
+                                               class="form-control tt-input" autocomplete="off"
+                                               spellcheck="false" dir="auto"
+                                               style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"><pre
+                                            aria-hidden="true"
+                                            style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                            class="tt-dropdown-menu"
+                                            style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                            class="tt-dataset-1"></div></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="category_div" class="form-group">
+                            <label class="col-sm-4 control-label">类别</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="twitter-typeahead"
+                                          style="position: relative; display: inline-block;">
+                                        <input type="text" class="form-control tt-hint"
+                                               disabled="" autocomplete="off" spellcheck="false"
+                                               style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                        <div type="text" id="category"
+                                             name="typeahead_example_modal_1"
+                                             class="form-control tt-input" autocomplete="off"
+                                             spellcheck="false" dir="auto"
+                                             style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"></div><pre
+                                            aria-hidden="true"
+                                            style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                            class="tt-dropdown-menu"
+                                            style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                            class="tt-dataset-1"></div></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">序列号</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="twitter-typeahead"
+                                          style="position: relative; display: inline-block;">
+                                        <input type="text" class="form-control tt-hint"
+                                               disabled="" autocomplete="off" spellcheck="false"
+                                               style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                        <input type="text" id="serial_number"
+                                               name="typeahead_example_modal_1"
+                                               class="form-control tt-input" autocomplete="off"
+                                               spellcheck="false" dir="auto"
+                                               style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"><pre
+                                            aria-hidden="true"
+                                            style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                            class="tt-dropdown-menu"
+                                            style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                            class="tt-dataset-1"></div></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">部门</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="twitter-typeahead"
+                                          style="position: relative; display: inline-block;">
+                                        <input type="text" class="form-control tt-hint"
+                                               disabled="" autocomplete="off" spellcheck="false"
+                                               style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                        <input type="text" id="department"
+                                               name="typeahead_example_modal_1"
+                                               class="form-control tt-input" autocomplete="off"
+                                               spellcheck="false" dir="auto"
+                                               style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"><pre
+                                            aria-hidden="true"
+                                            style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                            class="tt-dropdown-menu"
+                                            style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                            class="tt-dataset-1"></div></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">员工</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="twitter-typeahead"
+                                          style="position: relative; display: inline-block;">
+                                        <input type="text" class="form-control tt-hint"
+                                               disabled="" autocomplete="off" spellcheck="false"
+                                               style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                        <div type="text" id="employee"
+                                             name="typeahead_example_modal_1"
+                                             class="form-control tt-input" autocomplete="off"
+                                             spellcheck="false" dir="auto"
+                                             style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"></div><pre
+                                            aria-hidden="true"
+                                            style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                            class="tt-dropdown-menu"
+                                            style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                            class="tt-dataset-1"></div></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">购买日期</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group input-medium date date-picker" style="float: left" data-date-format="yyyy-mm-dd" data-date-end-date="+31d" >
+
+                                        <input type="text" class="form-control" id='purchase_date' readonly="">
+                                        <span class="input-group-btn">
+                                            <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                                        </span>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">含税价格</label>
+
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="twitter-typeahead"
+                                          style="position: relative; display: inline-block;">
+                                        <input type="text" class="form-control tt-hint"
+                                               disabled="" autocomplete="off" spellcheck="false"
+                                               style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                        <input type="text" id="payment"
+                                               name="typeahead_example_modal_1"
+                                               class="form-control tt-input" autocomplete="off"
+                                               spellcheck="false" dir="auto"
+                                               style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"><pre
+                                            aria-hidden="true"
+                                            style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                            class="tt-dropdown-menu"
+                                            style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                            class="tt-dataset-1"></div></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">原价</label>
+
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="twitter-typeahead"
+                                          style="position: relative; display: inline-block;">
+                                        <input type="text" class="form-control tt-hint"
+                                               disabled="" autocomplete="off" spellcheck="false"
+                                               style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                        <input type="text" id="cost"
+                                               name="typeahead_example_modal_1"
+                                               class="form-control tt-input" autocomplete="off"
+                                               spellcheck="false" dir="auto"
+                                               style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"><pre
+                                            aria-hidden="true"
+                                            style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                            class="tt-dropdown-menu"
+                                            style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                            class="tt-dataset-1"></div></span></span>
+
+                                </div><button id="auto_calculate" type="button" class="btn btn-primary">自动计算</button>
+                            </div>
+                        </div>
+                        <div class="modal-body form">
+{#                        <div class="form-group">#}
+{#                            <label class="col-sm-4 control-label">数量(选填)</label>#}
+{#                            <div class="col-sm-8">#}
+{#                                <div class="input-group">#}
+{#                                    <span class="twitter-typeahead"#}
+{#                                          style="position: relative; display: inline-block;">#}
+{#                                        <input type="text" class="form-control tt-hint"#}
+{#                                               disabled="" autocomplete="off" spellcheck="false"#}
+{#                                               style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">#}
+{#                                        <input type="text" id="count"#}
+{#                                               name="typeahead_example_modal_1"#}
+{#                                               class="form-control tt-input" autocomplete="off"#}
+{#                                               spellcheck="false" dir="auto"#}
+{#                                               style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"><pre#}
+{#                                            aria-hidden="true"#}
+{#                                            style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span#}
+{#                                            class="tt-dropdown-menu"#}
+{#                                            style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div#}
+{#                                            class="tt-dataset-1"></div></span></span>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+                        <div class="form-group last">
+                            <label class="col-sm-4 control-label">备注</label>
+
+                            <div class="col-sm-6">
+                                <textarea class="form-control" id='comment' style="width: 290px" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div id="id" style="display: none"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="rule_save()"><i class="fa fa-check"></i>保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4><a href="/static/files/wanzhong_fixed_assets.xlsx">下载Excel文件</a></h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/datatables-->
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="/static/assets/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/DT_bootstrap.js"></script>
+
+<!--<script src="/static/assets/plugins/context.js"></script>-->
+<!--<script src="/static/assets/plugins/jstree/dist/jstree.min.js"></script>-->
+<script src="/static/assets/plugins/holder.js"></script>
+<script src="/static/assets/plugins/stilearn-base.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
+<script src="/static/assets/plugins/select2/select2.js"></script>
+<script src="/static/assets/plugins/datatables/extras/TableTools.min.js"></script>
+<script src="/static/assets/scripts/custom/table-managed.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
+
+<script type="text/javascript">
+var oTable;
+var aButtons
+/* Formating function for row details */
+
+$(document).ready(function () {
+    $('.date-picker').datepicker({
+        rtl: App.isRTL(),
+        autoclose: true,
+        defaultDate: 0
+    });
+
+    $.post('/assets_table_dropdown/', {}, function (d) {
+        $('#description').select2({
+            multiple: true,
+            placeholder: '请选择描述',
+            allowClear: true,
+            data: d['description']
+        });
+{#        $('#model').select2({#}
+{#            multiple: true,#}
+{#            placeholder: '请选择型号',#}
+{#            allowClear: true,#}
+{#            data: d['model']#}
+{#        });#}
+        $('#category').select2({
+            multiple: true,
+            placeholder: '请选择类别',
+            allowClear: true,
+            data: d['category']
+        });
+{#        $('#department').select2({#}
+{#            multiple: true,#}
+{#            placeholder: '请选择部门',#}
+{#            allowClear: true,#}
+{#            data: d['department']#}
+{#        });#}
+    })
+    $.post('/order_form_dropdown/', {}, function (d) {
+        $('#employee').select2({
+            multiple: true,
+            placeholder: '请选择员工',
+            allowClear: true,
+            data: d['list']
+        });
+    })
+
+    aButtons = [
+            {
+                "sExtends": 'text',
+
+                "sButtonText": '<font color="white">增加</font><i class="fa fa-plus"></i>',
+                "sButtonClass": "btn green ",
+                "fnComplete": function (nButton, oConfig, nRow) {
+                    add()
+                }
+
+            },
+            {
+                "sExtends": 'select',
+                "sButtonText": '<font color="white">编辑</font><i class="fa fa-edit"></i>',
+                "sButtonClass": "btn blue",
+                "fnComplete": function (nButton, oConfig, nRow) {
+                    edit()
+                }
+
+            },
+            {
+                "sExtends": 'select',
+                "sButtonText": '<font color="white">导出到Excel文件</font><i class="fa fa-level-down"></i>',
+                "sButtonClass": "btn yellow",
+                "fnComplete": function (nButton, oConfig, nRow) {
+                    export_excel_file()
+                }
+            }
+        ]
+    loaddata()
+
+
+});
+
+function loaddata() {
+    oTable = $('#datatables').dataTable({
+        "sAjaxSource": "/assets_table_data/?rand=" + Math.random(),
+        "sDom": "<'row-fluid'<'span6'T><'span6'f>r><'table-scrollable't><'fluid'<'span3'l><'span4'i><'span5'p>>",
+        "bServerSide": true,
+        "bPaginate": true, // 是否使用分页
+        "bProcessing": true, //是否显示正在处理的提示
+        "bLengthChange": true, //是否启用设置每页显示记录数
+        "bFilter": true, //是否使用搜索
+        "bStateSave": true,
+        "bDestroy": true,
+        "bSort": true, //是否使用排序
+        "bAutoWidth": true, //列的宽度会根据table的宽度自适应
+        "sPaginationType": "bootstrap",
+//        "aLengthMenu": [
+//                    [5, 15, 20, -1],
+//                    [5, 15, 20, "All"] // change per page values here
+//                ],
+        "oTableTools": {
+            "sRowSelect": "single",
+            'aButtons': aButtons
+        },
+        "aoColumns": [
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "5%", 'bVisible': false}
+
+
+        ],
+        "aaSorting": [
+            [0, 'asc']
+        ],
+        "oLanguage": {
+            "sProcessing": "正在加载数据...",
+            'sSearch': '数据筛选:',
+            "sLengthMenu": "每页显示 _MENU_ 项记录",
+            "sZeroRecords": "没有符合项件的数据...",
+            "sInfo": "当前数据为从第 _START_ 到第 _END_ 项数据；总共有 _TOTAL_ 项记录",
+            "sInfoEmpty": "显示 0 至 0 共 0 项",
+            "sInfoFiltered": "(_MAX_)",
+            "oPaginate": {
+                "sFirst": '首页',
+                "sPrevious": "上一页",
+                "sNext": "下一页",
+                "sLast": "最后一页"
+            }
+
+        },
+        "fnInitComplete": function (oSettings, json) {
+            $('input[type=checkbox],input[type=radio],input[type=file]').uniform()
+        },
+        "fnDrawCallback": function (oSettings) {
+            $('input[type=checkbox],input[type=radio],input[type=file]').uniform()
+        },
+        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        },
+        "fnServerData": function (sSource, aoData, fnCallback) {
+            aoData.push({csrfmiddlewaretoken: '{{ csrf_token }}'})
+            $.ajax({
+                "dataType": 'json',
+                "type": "POST",
+                "url": sSource,
+                "data": aoData,
+                "success": fnCallback
+            });
+        }
+    });
+}
+
+function rule_save() {
+    var FANO = $('#FANO').val();
+    var description = $('#description').select2('data')
+{#    var model = $('#model').select2('data')#}
+    var model = $('#model').val();
+    var category = $('#category').select2('data')
+{#    var department = $('#department').select2('data')#}
+    var serial_number = $('#serial_number').val();
+    var department = $('#department').val();
+    var employee = $('#employee').select2('data')
+    var purchase_date = $('#purchase_date').val()
+    var payment = $('#payment').val();
+    var cost = $('#cost').val();
+    var count = $('#count').val()
+    var comment = $('#comment').val();
+    var id = $('#id').val();
+
+    if (FANO == '' || description == '' || model == '' || payment == '' || cost == '') {
+        toastr.error('不能为空')
+        return;
+    }
+
+    var description_list = []
+    for (var i in description) {
+        description_list.push(description[i]["text"])
+    }
+
+{#    var model_list = []#}
+{#    for (var i in model) {#}
+{#        model_list.push(model[i]["text"])#}
+{#    }#}
+
+    var category_list = []
+    for (var i in category) {
+        category_list.push(category[i]["text"])
+    }
+
+{#    var department_list = []#}
+{#    for (var i in department) {#}
+{#        department_list.push(department[i]["text"])#}
+{#    }#}
+
+    var employee_list = []
+    for (var i in employee) {
+        employee_list.push(employee[i]["text"])
+    }
+
+    showAjaxLoad()
+    $(self).button('loading');//正在登陆中，显示data-loading-text 标记内容
+
+
+    $.ajax({
+        url: '/assets_table_save/',
+        type: "POST",
+        data: {
+            FANO:FANO,
+            description:description_list[0],
+            model:model,
+            category:category_list[0],
+            serial_number:serial_number,
+            department:department,
+            employee:employee_list[0],
+            purchase_date:purchase_date,
+            payment:payment,
+            cost:cost,
+            count:count,
+            comment:comment,
+            id:id
+        },
+        success: function (d) {
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                $('#datatables').dataTable().fnDraw()
+            } else {
+                toastr.error(d.msg)
+            }
+        }
+    });
+    $('#myModal').modal('hide')
+    $(self).button('complete')
+}
+function contain(Array, s) {
+    for (var i = 0; i < Array.length; i++)
+        if (Array[i] == s)
+            return true;
+    return false;
+}
+function add() {
+    $('#FANO').val("")
+{#    $('#FANO').attr('disabled',true)#}
+    $('#description').select2("data", "")
+{#    $('#model').select2("data", "")#}
+    $('#model').val("")
+    $('#category').select2("data", "")
+{#    $('#department').select2("data", "")#}
+    $('#serial_number').val("")
+    $('#department').val("")
+    $('#employee').select2("data", "")
+    $('#purchase_date').val("")
+    $('#payment').val("")
+    $('#cost').val("")
+    $('count').val("")
+    $('#comment').val("")
+    $('#id').val("")
+    $('#FANO').attr('disabled',false)
+    $('#description').attr('disabled',false)
+    $('#model').attr('disabled',false)
+    $('#category_div').show()
+    $('#category').attr('disabled',false)
+    $('#count').attr('disabled',false)
+    $('#payment').attr('disabled',false)
+    $('#cost').attr('disabled',false)
+    $('#auto_calculate').attr('disabled',false)
+    $("#myModal").modal('show')
+}
+function edit() {
+    $('#count').val("")
+    var oTT = TableTools.fnGetInstance('datatables');
+    var aData = oTT.fnGetSelectedData();
+    if (aData.length == 1) {
+        var FANO = aData[0][0];
+        var description = aData[0][1];
+        var model = aData[0][2];
+        var serial_number = aData[0][3];
+        var department = aData[0][5];
+        var employee = aData[0][6];
+        var purchase_date = aData[0][7];
+        var payment = aData[0][8];
+        var cost = aData[0][9];
+        var comment = aData[0][14];
+        var id = aData[0][15];
+
+        $('#FANO').val(FANO)
+        $.post('/assets_table_dropdown/', {id:id,description:description,model:model,
+                                            department:department}, function (d) {
+            $('#description').select2("data",d['description_edit'])
+{#            $('#model').select2("data",d['model_edit'])#}
+            $('#category').select2("data",d['category_edit'])
+{#            $('#department').select2("data",d['department_edit'])#}
+        })
+        $.post('/order_form_dropdown/', {id:id,name:employee}, function (d) {
+            $('#employee').select2("data",d['edit'])
+        })
+        $('#model').val(model)
+        $('#department').val(department)
+        $('#purchase_date').val(purchase_date)
+        $('#payment').val(payment)
+        $('#cost').val(cost)
+        $('#comment').val(comment)
+        $('#id').val(id)
+
+        $('#FANO').attr('disabled',true)
+        $('#description').attr('disabled',true)
+        $('#model').attr('disabled',true)
+        $('#category_div').hide()
+        $('#count').attr('disabled',true)
+        $('#payment').attr('disabled',true)
+        $('#cost').attr('disabled',true)
+        $('#auto_calculate').attr('disabled',true)
+
+        $("#myModal").modal('show')
+    }
+}
+
+function export_excel_file(){
+    showAjaxLoad()
+    $.post('/assets_export_excel/', {}, function (d) {
+            hideAjaxLoad()
+            if (d.code == 0) {
+                toastr.success(d.msg)
+                $("#myModal1").modal('show')
+            } else {
+                toastr.error(d.msg)
+            }
+    })
+}
+
+function round(v,e){
+    var t=1;
+    for(;e>0;t*=10,e--);
+    for(;e<0;t/=10,e++);
+    return Math.round(v*t)/t;
+
+}
+
+$('#auto_calculate').click(function(){
+    var payment = $('#payment').val()
+    $('#cost').val(round(payment / 1.13, 2))
+})
+
+</script>
+{% endblock %}

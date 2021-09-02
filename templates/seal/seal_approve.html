@@ -1,0 +1,516 @@
+{% extends 'public/index.html' %}
+{% block css %}
+<link href="/static/assets/theme/default/style.min.css" rel="stylesheet"/>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/select2/select2-metronic.css"/>
+<link rel="stylesheet" href="/static/assets/css/DT_bootstrap.css"/>
+<!-- END PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-select/bootstrap-select.min.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/jquery-multi-select/css/multi-select.css"/>
+<link rel="stylesheet" type="text/css" href="/static/assets/plugins/bootstrap-datepicker/css/datepicker.css" />
+
+{% endblock %}
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet box grey tasks-widget">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-globe"></i>印章审批
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table table-striped table-bordered table-hover table-full-width"  id="datatables">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>申请人</th>
+                        <th>事由</th>
+                        <th>印章/证照类型</th>
+                        <th>使用方式</th>
+                        <th>状态</th>
+                        <th>导出Excel</th>
+                        <th>审批</th>
+                        <th>ID</th>
+                        <th>审批人</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">印章审批</h4>
+            </div>
+
+
+
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+{#                    <div class="form-group">#}
+{#                        <label class="col-sm-4 control-label">附件</label>#}
+{#                        <div  class="col-sm-8">#}
+{#                            <div class="tab-content no-space">#}
+{#                                <div class="tab-pane active" id="tab_images">#}
+{#                                    <div class="alert alert-success margin-bottom-10">#}
+{#                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>#}
+{#                                        <i class="fa fa-warning fa-lg"></i> 请将上传文件打包，选择ZIP或RAR格式进行上传#}
+{#                                    </div>#}
+{#                                    <div id="tab_images_uploader_container" class="text-align-reverse margin-bottom-10" style="position: relative;">#}
+{#                                        <a id="tab_images_uploader_pickfiles" href="javascript:;" class="btn yellow" style="position: relative; z-index: 1; float:left">#}
+{#                                            <i class="fa fa-plus"></i> 选择文件#}
+{#                                        </a>#}
+{#                                        <a id="tab_images_uploader_uploadfiles" href="javascript:;" class="btn blue" style="float:left; margin-left: 10px">#}
+{#                                            <i class="fa fa-share"></i> 上传文件#}
+{#                                        </a>#}
+{#                                    <div id="html5_191s5i9758q1p7bcdq1badmjb3_container" class="moxie-shim moxie-shim-html5" style="position: absolute; top: 0px; left: 1401px; width: 113px; height: 34px; overflow: hidden; z-index: 0;"><input id="html5_191s5i9758q1p7bcdq1badmjb3" type="file" style="font-size: 999px; opacity: 0; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;display:none" multiple="" accept="image/jpeg,image/gif,image/png,application/zip"></div></div>#}
+{#                                    <div class="row">#}
+{#                                        <div id="tab_images_uploader_filelist" class="col-md-6 col-sm-12"></div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+                    <div id="add_process_div" class="form-group">
+                        <label class="col-sm-4 control-label">增加流程</label>
+                        <div  class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                                <input type="text" class="form-control tt-hint"
+                                       disabled="" autocomplete="off" spellcheck="false"
+                                       style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);">
+                                <div type="text" id="add_process"
+                                     name="typeahead_example_modal_1"
+                                     class="form-control tt-input" autocomplete="off"
+                                     spellcheck="false" dir="auto"
+                                     style="width: 250px;position: relative; vertical-align: top; background-color: transparent;"></div><pre
+                                    aria-hidden="true"
+                                    style="position: absolute; visibility: hidden; white-space: nowrap; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span
+                                    class="tt-dropdown-menu"
+                                    style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div
+                                    class="tt-dataset-1"></div></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group last">
+                        <label class="col-sm-4 control-label">备注</label>
+
+                        <div class="col-sm-6">
+                            <textarea class="form-control" id='comment' style="width: 290px" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="id" style="display: none"></div>
+            <div id="button" class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn green" onclick="agree()"><i class="fa fa-check"></i> 通过</button>
+                <button type="button" class="btn blue" onclick="back_edit()"><i class="fa fa-edit"></i> 退回修改</button>
+                <button type="button" class="btn red" onclick="disagree()"><i class="fa fa-times"></i> 不通过</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body form">
+                <form action="#" class="form-horizontal form-row-seperated">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align:center;width:100%"><h4><a href="/static/files/contract.xlsx">下载Excel文件</a></h4></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="twitter-typeahead"
+                                      style="position: relative; display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/datatables-->
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="/static/assets/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/data-tables/DT_bootstrap.js"></script>
+
+<!--<script src="/static/assets/plugins/context.js"></script>-->
+<!--<script src="/static/assets/plugins/jstree/dist/jstree.min.js"></script>-->
+<script src="/static/assets/plugins/holder.js"></script>
+<script src="/static/assets/plugins/stilearn-base.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
+<script src="/static/assets/plugins/select2/select2.js"></script>
+<script src="/static/assets/plugins/datatables/extras/TableTools.min.js"></script>
+<script src="/static/assets/scripts/custom/table-managed.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="/static/assets/plugins/plupload/js/plupload.full.min.js" ></script>
+
+<script type="text/javascript">
+var oTable;
+var aButtons
+/* Formating function for row details */
+
+$(document).ready(function () {
+    aButtons = [
+{#            {#}
+{#                "sExtends": 'text',#}
+{##}
+{#                "sButtonText": '<font color="white">添加 </font><i class="fa fa-plus"></i>',#}
+{#                "sButtonClass": "btn green ",#}
+{#                "fnComplete": function (nButton, oConfig, nRow) {#}
+{#                    add()#}
+{#                }#}
+{##}
+{#            }#}
+        ]
+
+    $('#upload_button').on('change',function(){
+        $('#upload_show').html($('#upload').val())
+    })
+    $('#upload_show').html('{{ upload }}')
+    $('#upload_show').attr('href','/media/{{ upload_path }}')
+
+
+    $.post('/order_form_dropdown/', {}, function (d) {
+        $('#add_process').select2({
+            multiple: false,
+            placeholder: '请选择员工',
+            allowClear: true,
+            data: d['list']
+        });
+    })
+
+
+
+    var PluploadCustom = function () {
+        var handleImages = function() {
+            // see http://www.plupload.com/
+            var uploader = new plupload.Uploader({
+                runtimes : 'html5,flash,silverlight,html4',
+
+                browse_button : document.getElementById('tab_images_uploader_pickfiles'), // you can pass in id...
+                container: document.getElementById('tab_images_uploader_container'), // ... or DOM Element itself
+
+                url : "/seal_get_upload/",
+
+                filters : {
+                    max_file_size : '100000000mb',
+                    chunk_size : '1000mb',
+                    mime_types: [
+                        {title : "Zip files", extensions : "zip"},
+                        {title : "RAR files", extensions : "rar"}
+                    ]
+                },
+
+                // Flash settings
+                flash_swf_url : 'assets/plugins/plupload/js/Moxie.swf',
+
+                // Silverlight settings
+                silverlight_xap_url : 'assets/plugins/plupload/js/Moxie.xap',
+                headers : {
+                    "X-CSRFToken":getCookie('_csrf_token')
+                },
+                init: {
+                    PostInit: function() {
+                        $('#tab_images_uploader_filelist').html("");
+
+                        $('#tab_images_uploader_uploadfiles').click(function() {
+                            uploader.start();
+                            return false;
+                        });
+
+                        $('#tab_images_uploader_filelist').on('click', '.added-files .remove', function(){
+                            uploader.removeFile($(this).parent('.added-files').attr("id").replace('uploaded_file_',''));
+                            $(this).parent('.added-files').remove();
+                        });
+                    },
+
+                    FilesAdded: function(up, files) {
+                        plupload.each(files, function(file) {
+                            $('#tab_images_uploader_filelist').text("")
+                            $('#tab_images_uploader_filelist').append('<div class="alert alert-warning added-files" id="uploaded_file_' + file.id + '" style="margin-top:5px">' + file.name + '(' + plupload.formatSize(file.size) + ') <span class="status label label-info"></span>&nbsp;<a href="javascript:;" style="margin-top:-5px" class="remove pull-right btn btn-sm red"><i class="fa fa-times"></i> 移除</a></div>');
+                        });
+                    },
+
+                    UploadProgress: function(up, file) {
+                        $('#uploaded_file_' + file.id + ' > .status').html(file.percent + '%');
+                    },
+
+                    FileUploaded: function(up, file, response) {
+                        var response = $.parseJSON(response.response);
+                        if (response.code == 0) {
+                            var id = response.id; // uploaded file's unique name. Here you can collect uploaded file names and submit an jax request to your server side script to process the uploaded files and update the images tabke
+
+                            $('#uploaded_file_' + file.id + ' > .status').removeClass("label-info").addClass("label-success").html('<i class="fa fa-check"></i>'+response.msg); // set successfull operation
+                            $('#tab_images_uploader_filelist').text("")
+                            toastr.success(response.msg)
+                            $('#button').show()
+{#                            $('#datatables').dataTable().fnDraw()#}
+                        } else {
+                            $('#uploaded_file_' + file.id + ' > .status').removeClass("label-info").addClass("label-danger").html('<i class="fa fa-warning"></i>'+response.msg); // set failed operation
+                            App.alert({type: 'danger', message: '文件上传失败，请重新上传', closeInSeconds: 10, icon: 'warning'});
+                            toastr.error(response.msg)
+                        }
+                    },
+                    Error: function(up, err) {
+                        App.alert({type: 'danger', message: err.message, closeInSeconds: 10, icon: 'warning'});
+                    }
+                }
+            });
+            uploader.init();
+        }
+
+        return {
+            //main function to initiate the module
+            init: function () {
+                handleImages();
+            }
+        };
+    }();
+
+    PluploadCustom.init()
+
+    loaddata()
+
+});
+
+function loaddata() {
+    oTable = $('#datatables').dataTable({
+        "sAjaxSource": "/seal_approve_data/?rand=" + Math.random(),
+        "sDom": "<'row-fluid'<'span6'T><'span6'f>r><'table-scrollable't><'fluid'<'span3'l><'span4'i><'span5'p>>",
+        "bServerSide": true,
+        "bPaginate": true, // 是否使用分页
+        "bProcessing": true, //是否显示正在处理的提示
+        "bLengthChange": true, //是否启用设置每页显示记录数
+        "bFilter": true, //是否使用搜索
+        "bStateSave": true,
+        "bDestroy": true,
+        "bSort": true, //是否使用排序
+        "bAutoWidth": true, //列的宽度会根据table的宽度自适应
+        "sPaginationType": "bootstrap",
+//        "aLengthMenu": [
+//                    [5, 15, 20, -1],
+//                    [5, 15, 20, "All"] // change per page values here
+//                ],
+        "oTableTools": {
+            "sRowSelect": "",
+            'aButtons': aButtons
+        },
+        "aoColumns": [
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "20%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "10%"},
+            { "sClass": "center", 'sWidth': "5%", 'bVisible': false},
+            { "sClass": "center", 'sWidth': "5%", 'bVisible': false}
+
+
+        ],
+        "aaSorting": [
+            [8, 'desc']
+        ],
+        "oLanguage": {
+            "sProcessing": "正在加载数据...",
+            'sSearch': '数据筛选:',
+            "sLengthMenu": "每页显示 _MENU_ 项记录",
+            "sZeroRecords": "没有符合项件的数据...",
+            "sInfo": "当前数据为从第 _START_ 到第 _END_ 项数据；总共有 _TOTAL_ 项记录",
+            "sInfoEmpty": "显示 0 至 0 共 0 项",
+            "sInfoFiltered": "(_MAX_)",
+            "oPaginate": {
+                "sFirst": '首页',
+                "sPrevious": "上一页",
+                "sNext": "下一页",
+                "sLast": "最后一页"
+            }
+
+        },
+        "fnInitComplete": function (oSettings, json) {
+            $('input[type=checkbox],input[type=radio],input[type=file]').uniform()
+        },
+        "fnDrawCallback": function (oSettings) {
+            $('input[type=checkbox],input[type=radio],input[type=file]').uniform()
+        },
+        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            $('td:eq(0)',nRow).on('click',function(){
+                $.post('/seal_set_session/', {id:aData[8], commit:0}, function (d) {
+                    location.href = '/seal_apply_detail/'
+                })
+            })
+            $('td:eq(1)',nRow).on('click',function(){
+                $.post('/seal_set_session/', {id:aData[8], commit:0}, function (d) {
+                    location.href = '/seal_apply_detail/'
+                })
+            })
+            $('td:eq(2)',nRow).on('click',function(){
+                $.post('/seal_set_session/', {id:aData[8], commit:0}, function (d) {
+                    location.href = '/seal_apply_detail/'
+                })
+            })
+            $('td:eq(3)',nRow).on('click',function(){
+                $.post('/seal_set_session/', {id:aData[8], commit:0}, function (d) {
+                    location.href = '/seal_apply_detail/'
+                })
+            })
+            $('td:eq(4)',nRow).on('click',function(){
+                $.post('/seal_set_session/', {id:aData[8], commit:0}, function (d) {
+                    location.href = '/seal_apply_detail/'
+                })
+            })
+            $('td:eq(5)',nRow).on('click',function(){
+                $.post('/seal_set_session/', {id:aData[8], commit:0}, function (d) {
+                    location.href = '/seal_apply_detail/'
+                })
+            })
+
+            if(aData[5] == 1 || aData[5] == 2 || aData[5] == 3){
+                $('td:eq(5)',nRow).html('<div><img src="/static/assets/img/waiting.png">&nbsp等待 ' + aData[9] + ' 审批</div>')
+            }else if(aData[5] == 4) {
+                $('td:eq(5)', nRow).html('<div><img src="/static/assets/img/running.png">&nbsp待归还</div>')
+            }else if(aData[5] == 5){
+                $('td:eq(5)',nRow).html('<div><img src="/static/assets/img/running.png">&nbsp已完成</div>')
+            }else if(aData[5] == 6){
+                $('td:eq(5)',nRow).html('<div><img src="/static/assets/img/stoping.png">&nbsp已拒绝</div>')
+            }else if(aData[5] == -1){
+                $('td:eq(5)',nRow).html('<div><img src="/static/assets/img/waiting.png">&nbsp申请人修改</div>')
+            }
+
+            $('td:eq(6)',nRow).on('click',function(){
+                $.post('/seal_create_excel/', {id:aData[8]}, function (d) {
+                    if (d.code == 0) {
+                        toastr.success(d.msg)
+                        $('#myModal2').modal('show')
+                    } else {
+                        toastr.error(d.msg)
+                    }   
+                })
+            })
+            $('td:eq(7)',nRow).on('click',function(){
+                var id = aData[8]
+                $.cookie('id',id,{ expires: 1 })
+                var status = aData[5]
+                $.cookie('status',status,{ expires: 1 })
+                if (status == '2') {
+                    $('#add_process_div').show()
+                }else{
+                    $('#add_process_div').hide()
+                }
+                if (status == 80){
+                    $('#button').hide()
+                }
+                $("#myModal").modal('show')
+            })
+        },
+        "fnServerData": function (sSource, aoData, fnCallback) {
+            aoData.push({csrfmiddlewaretoken: '{{ csrf_token }}'})
+            $.ajax({
+                "dataType": 'json',
+                "type": "POST",
+                "url": sSource,
+                "data": aoData,
+                "success": fnCallback
+            });
+        }
+    });
+}
+
+
+function agree(){
+    var id = $.cookie('id')
+    var status = $.cookie('status')
+    var process_type = $.cookie('process_type')
+    var comment = $('#comment').val()
+    var add_process = $('#add_process').select2('data')
+    if (add_process == null){
+        add_process = ''
+    }else{
+        add_process = add_process['text']
+    }
+    $.post('/seal_approve_process/', {id:id, status:status, comment:comment, add_process:add_process, flag:1}, function (d) {
+        if (d.code == 0) {
+            toastr.success(d.msg)
+            $('#datatables').dataTable().fnDraw()
+        } else {
+            toastr.error(d.msg)
+        }
+    })
+    $('#myModal').modal('hide')
+}
+
+function back_edit(){
+    var id = $.cookie('id')
+    var status = $.cookie('status')
+    var process_type = $.cookie('process_type')
+    var comment = $('#comment').val()
+    var add_process = $('#add_process').select2('data')
+    if (add_process == null){
+        add_process = ''
+    }else{
+        add_process = add_process['text']
+    }
+    $.post('/seal_approve_process/', {id:id, status:status, comment:comment, add_process:add_process, flag:2}, function (d) {
+        if (d.code == 0) {
+            toastr.success(d.msg)
+            $('#datatables').dataTable().fnDraw()
+        } else {
+            toastr.error(d.msg)
+        }
+    })
+    $('#myModal').modal('hide')
+}
+
+function disagree(){
+    var id = $.cookie('id')
+    var status = $.cookie('status')
+    var process_type = $.cookie('process_type')
+    var comment = $('#comment').val()
+    var add_process = $('#add_process').select2('data')
+    if (add_process == null){
+        add_process = ''
+    }else{
+        add_process = add_process['text']
+    }
+    $.post('/seal_approve_process/', {id:id, status:status, comment:comment, add_process:add_process, flag:0}, function (d) {
+        if (d.code == 0) {
+            toastr.success(d.msg)
+            $('#datatables').dataTable().fnDraw()
+        } else {
+            toastr.error(d.msg)
+        }
+    })
+    $('#myModal').modal('hide')
+}
+
+
+</script>
+{% endblock %}
